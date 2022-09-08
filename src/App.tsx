@@ -5,6 +5,38 @@ import "./App.css";
 import React from "react";
 
 import { css } from "@emotion/react";
+import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
+
+function Index() {
+  return (
+    <ul>
+      <li>
+        <Link to="/first">to first</Link>
+      </li>
+      <li>
+        <Link to="/second">to second</Link>
+      </li>
+    </ul>
+  );
+}
+
+function FirstPage() {
+  return (
+    <div>
+      <a href="/">back</a>
+      <p>first page content</p>
+    </div>
+  );
+}
+
+function SecondPage() {
+  return (
+    <div>
+      <a href="/">back</a>
+      <p>second page content</p>
+    </div>
+  );
+}
 
 function App() {
   // const [greetMsg, setGreetMsg] = useState("");
@@ -53,7 +85,20 @@ function App() {
     font-size: 3rem;
   `;
 
-  return <div css={style}>Hello!</div>;
+  // return <div css={style}>Hello!</div>;
+
+  return (
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="first" element={<FirstPage />} />
+          <Route path="second" element={<SecondPage />} />
+        </Routes>
+      </BrowserRouter>
+      <Outlet />
+    </div>
+  );
 }
 
 export default App;
