@@ -3,7 +3,19 @@ import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxRuntime: "automatic",
+      jsxImportSource: "@emotion/react",
+      babel: {
+        presets: [
+          "@emotion/babel-preset-css-prop",
+          // { runtime: "automatic", importSource: "@emotion/react" },
+        ],
+        plugins: ["@emotion"],
+      },
+    }),
+  ],
 
   // Vite optons tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   // prevent vite from obscuring rust errors

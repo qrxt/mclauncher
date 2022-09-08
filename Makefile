@@ -7,8 +7,8 @@ kill:
 
 # Tests
 lint-rs:
-	cd ./src-tauri/ && cargo fmt --check
-	cd ./src-tauri/ && cargo clippy
+	cd ./src-tauri/ && cargo fmt --check && cd ..
+	cd ./src-tauri/ && cargo clippy && cd ..
 
 test-rs:
 	cd ./src-tauri/ && cargo test

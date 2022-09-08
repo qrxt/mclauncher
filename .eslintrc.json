@@ -17,6 +17,7 @@
     "sourceType": "module"
   },
   "plugins": [
+    "@emotion/eslint-plugin",
     "react",
     "@typescript-eslint",
     "prettier",
@@ -25,6 +26,7 @@
     "jsx-a11y"
   ],
   "rules": {
+    "react/no-unknown-property": [2, { "ignore": ["css"] }],
     "prettier/prettier": "error",
     "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
