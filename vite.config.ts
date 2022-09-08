@@ -8,10 +8,7 @@ export default defineConfig({
       jsxRuntime: "automatic",
       jsxImportSource: "@emotion/react",
       babel: {
-        presets: [
-          "@emotion/babel-preset-css-prop",
-          // { runtime: "automatic", importSource: "@emotion/react" },
-        ],
+        presets: ["@emotion/babel-preset-css-prop"],
         plugins: ["@emotion"],
       },
     }),

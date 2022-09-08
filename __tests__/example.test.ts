@@ -1,5 +1,7 @@
-describe("example test describe", () => {
-  test("example test", () => {
+import { testFunction } from "./t";
+
+describe("example test describe [.ts]", () => {
+  test("example test [.ts]", () => {
     expect("true").toBeTruthy();
   });
 });
