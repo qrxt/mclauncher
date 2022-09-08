@@ -6,17 +6,24 @@ import React from "react";
 
 import { css } from "@emotion/react";
 import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function Index() {
+  const { t } = useTranslation();
+
   return (
-    <ul>
-      <li>
-        <Link to="/first">to first</Link>
-      </li>
-      <li>
-        <Link to="/second">to second</Link>
-      </li>
-    </ul>
+    <div>
+      <p>{t("settings.title")}</p>
+
+      <ul>
+        <li>
+          <Link to="/first">to first</Link>
+        </li>
+        <li>
+          <Link to="/second">to second</Link>
+        </li>
+      </ul>
+    </div>
   );
 }
 
