@@ -19,6 +19,11 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+      - name: set git to use lf
+        if: matrix.platform == 'windows-latest'
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-20.04'
         run: |
