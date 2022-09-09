@@ -10,7 +10,8 @@
     "tauri": "tauri",
     "test": "jest",
     "lint": "eslint .",
-    "clean": "rimraf package-lock.json node_modules dist/** src-tauri/target/**"
+    "clean": "rimraf package-lock.json node_modules dist/** src-tauri/target/**",
+    "typecheck": "tsc --noEmit"
   },
   "husky": {
     "hooks": {

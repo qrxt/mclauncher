@@ -20,7 +20,9 @@
       "@emotion/react/types/css-prop",
       "jest",
       "@testing-library/jest-dom"
-    ]
+    ],
+    "noEmitOnError": false,
+    "outDir": "dist"
   },
   "include": ["src", "__tests__"],
   "references": [{ "path": "./tsconfig.node.json" }]

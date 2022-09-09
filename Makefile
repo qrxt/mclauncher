@@ -24,7 +24,7 @@ check-rust-all:
 	make test-rs
 
 typecheck-js:
-	npx tsc
+	npm run typecheck
 
 fmt-js:
 	npx -p prettier@latest -p pretty-quick pretty-quick

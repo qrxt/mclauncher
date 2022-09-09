@@ -4,6 +4,7 @@ const config = {
   globals: {
     "ts-jest": {
       babelConfig: true,
+      isolatedModules: true,
     },
   },
   testEnvironment: "jsdom",
