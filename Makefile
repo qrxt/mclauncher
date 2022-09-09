@@ -1,3 +1,9 @@
+
+# Setup
+setup:
+	npm i
+	cd ./src-tauri && cargo build
+
 # Dev
 dev:
 	npm run tauri dev
@@ -17,6 +23,9 @@ check-rust-all:
 	make lint-rs
 	make test-rs
 
+typecheck-js:
+	npx tsc
+
 fmt-js:
 	npx -p prettier@latest -p pretty-quick pretty-quick
 
@@ -27,6 +36,7 @@ lint-js:
 	npm run lint
 
 check-js-all:
+	make typecheck-js
 	make fmt-js
 	make lint-js
 	make test-js
@@ -43,11 +53,6 @@ test:
 
 build:
 	npm run tauri build
-
-# Setup
-setup:
-	npm i
-	cd ./src-tauri && cargo build
 
 # Misc
 
