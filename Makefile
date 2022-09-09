@@ -41,9 +41,15 @@ test:
 
 # Build
 
-# ...
+build:
+	npm run tauri build
 
 # Setup
 setup:
 	npm i
 	cd ./src-tauri && cargo build
+
+# Misc
+
+clean:
+	npm run clean
