@@ -1,7 +1,62 @@
-# Tauri + React + Typescript
+... TODO!(badges)
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+# Minecraft Launcher
 
-## Recommended IDE Setup
+... TODO!(description)
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## Features
+
+- OS support
+  - [ ] Windows
+  - [ ] Linux
+- Online mode
+  - [ ] Mojang auth
+  - [ ] Microsoft auth
+- [ ] Multiple isolated instances
+- Packs support
+  - [ ] Vanilla
+  - [ ] Forge
+  - ❌ Fabric
+- Languages
+  - [ ] English
+  - [ ] Russian
+
+## Stack
+
+- Tauri
+  - Back:
+    - Rust
+    - ... TODO!
+  - Frontend:
+    - React
+    - Vite
+    - Emotion
+    - ... TODO!
+
+## Usage
+
+You can download the installer for your operating system in the [releases section](https://github.com/qrxt/mclauncher/releases)
+
+... TODO!
+
+## Commands
+
+### `make setup`
+
+Install all Node Package Modules that depending this project, then build
+
+### `make dev`
+
+Run dev server, open webview. By default uses 1420 port
+
+### `make lint`
+
+Lint rust & js
+
+### `make build`
+
+Create tauri build
+
+### `make clean`
+
+Remove package.lock, node_modules, rust target/\*\*
