@@ -1,5 +1,8 @@
 {
   "translation": {
+    "header.title": "Header",
+    "header.controls.instances.name": "Instances",
+    "header.controls.settings.name": "Settings",
     "settings.title": "Settings"
   }
 }
