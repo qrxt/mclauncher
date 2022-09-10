@@ -7,20 +7,65 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "test": "jest",
+    "lint": "eslint .",
+    "clean": "rimraf package-lock.json node_modules dist/** src-tauri/target/**",
+    "typecheck": "tsc --noEmit"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.(js|jsx|ts|tsx)": [
+      "npm run lint:write",
+      "git add"
+    ]
   },
   "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@tauri-apps/api": "^1.0.2",
+    "i18next": "^21.9.1",
+    "i18next-browser-languagedetector": "^6.1.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@tauri-apps/api": "^1.0.2"
+    "react-i18next": "^11.18.5",
+    "react-router": "^6.3.0",
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
+    "@emotion/babel-plugin": "^11.10.2",
+    "@emotion/babel-preset-css-prop": "^11.10.0",
+    "@emotion/eslint-plugin": "^11.10.0",
+    "@tauri-apps/cli": "^1.0.5",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/jest": "^28.1.1",
     "@types/node": "^18.7.10",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "@typescript-eslint/parser": "^5.36.2",
     "@vitejs/plugin-react": "^2.0.0",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.7",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-redux": "^4.0.0",
+    "husky": "^8.0.1",
+    "jest": "^28.1.3",
+    "jest-environment-jsdom": "^29.0.2",
+    "lint-staged": "^13.0.3",
+    "prettier": "2.7.1",
+    "pretty-quick": "^3.1.3",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^28.0.8",
     "typescript": "^4.6.4",
-    "vite": "^3.0.2",
-    "@tauri-apps/cli": "^1.0.5"
+    "vite": "^3.0.2"
   }
 }
