@@ -22,7 +22,10 @@
       "@testing-library/jest-dom"
     ],
     "noEmitOnError": false,
-    "outDir": "dist"
+    "outDir": "dist",
+    "paths": {
+      "components/*": ["./src/components/*"]
+    }
   },
   "include": ["src", "__tests__"],
   "references": [{ "path": "./tsconfig.node.json" }]
