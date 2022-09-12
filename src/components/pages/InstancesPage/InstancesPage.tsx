@@ -1,10 +1,11 @@
 import React from "react";
 import Page from "components/Page";
+import InstancesContainer from "components/Instances/InstancesContainer";
 
 function InstancesPage() {
   return (
     <Page>
-      <p>Instances Page</p>
+      <InstancesContainer />
     </Page>
   );
 }

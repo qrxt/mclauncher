@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { colors } from "components/theme";
+import { colors } from "theme";
 
 export const headerStyles = css`
   grid-area: h;
@@ -24,4 +24,25 @@ export const controlsContainerStyles = css`
   padding: 0 25px;
   margin: 0;
   height: 100%;
+
+  list-style-type: none;
+`;
+
+export const controlWrapperStyles = css`
+  &:not(:last-child) {
+    margin-right: 25px;
+  }
+`;
+
+export const controlLinkStyles = css`
+  text-decoration: none;
+  color: ${colors.black};
+
+  &:visited {
+    color: ${colors.black};
+  }
+`;
+
+export const controlStyles = css`
+  font-size: 18px;
 `;

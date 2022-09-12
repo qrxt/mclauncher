@@ -5,6 +5,9 @@ import {
   headerStyles,
   navigationStyles,
   controlsContainerStyles,
+  controlWrapperStyles,
+  controlLinkStyles,
+  controlStyles,
 } from "./Header.style";
 
 interface HeaderControlProps {
@@ -16,7 +19,11 @@ interface HeaderControlProps {
 function HeaderControl(props: HeaderControlProps) {
   const { name, to } = props;
 
-  return <Link to={to}>{name}</Link>;
+  return (
+    <Link to={to} css={controlLinkStyles}>
+      <span css={controlStyles}>{name}</span>
+    </Link>
+  );
 }
 
 function Header() {
@@ -26,10 +33,10 @@ function Header() {
     <header css={headerStyles}>
       <nav css={navigationStyles}>
         <ul css={controlsContainerStyles}>
-          <li>
+          <li css={controlWrapperStyles}>
             <HeaderControl name={t("header.controls.instances.name")} to="/" />
           </li>
-          <li>
+          <li css={controlWrapperStyles}>
             <HeaderControl
               name={t("header.controls.settings.name")}
               to="/settings"

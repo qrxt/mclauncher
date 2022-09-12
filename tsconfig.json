@@ -24,7 +24,12 @@
     "noEmitOnError": false,
     "outDir": "dist",
     "paths": {
-      "components/*": ["./src/components/*"]
+      "components/*": ["./src/components/*"],
+      "types/*": ["./src/types/*"],
+      "types": ["./src/types"],
+      "theme/*": ["./src/theme/*"],
+      "theme": ["./src/theme"],
+      "assets/*": ["./srs/assets"]
     }
   },
   "include": ["src", "__tests__"],
