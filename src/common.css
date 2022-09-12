@@ -1,0 +1,15 @@
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400;
+  src: local(""),
+    url("/assets/fonts/nunito-v25-latin_cyrillic-regular.woff2") format("woff2"),
+    url("/assets/fonts/nunito-v25-latin_cyrillic-regular.woff") format("woff");
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  font-family: Nunito, Helvetica, sans-serif;
+}

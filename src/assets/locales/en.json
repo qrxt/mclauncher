@@ -1,5 +1,12 @@
 {
   "translation": {
+    "header.title": "Header",
+    "header.controls.instances.name": "Instances",
+    "header.controls.settings.name": "Settings",
+
+    "instances.title": "Instances",
+    "instances.actions.addNewInstance": "Add new instance",
+
     "settings.title": "Settings"
   }
 }

@@ -1,5 +1,12 @@
 {
   "translation": {
+    "header.title": "Шапка",
+    "header.controls.instances.name": "Сборки",
+    "header.controls.settings.name": "Настройки",
+
+    "instances.title": "Сборки",
+    "instances.actions.addNewInstance": "Добавить сборку",
+
     "settings.title": "Настройки"
   }
 }
