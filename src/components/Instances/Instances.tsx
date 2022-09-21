@@ -6,6 +6,7 @@ import { AddButton } from "components/buttons/AddButton";
 import { AddButtonVariant } from "components/buttons/AddButton/AddButton";
 import { useTranslation } from "react-i18next";
 import Sidebar from "components/Sidebar";
+import InstanceCard from "components/Instance/Instance";
 
 interface InstancesProps {
   instances: Instance[];
@@ -24,17 +25,28 @@ function InstancesPlaceholder() {
   );
 }
 
-function InstancesList() {
-  return <section></section>;
+function InstancesList({ instances }: { instances: Instance[] }) {
+  return (
+    <section>
+      {instances.map((instance) => {
+        return <InstanceCard instance={instance} key={instance.name} />;
+      })}
+    </section>
+  );
 }
 
 function Instances(props: InstancesProps) {
   const { instances } = props;
+  console.log("instances: ", instances);
 
   return (
     <section css={instancesStyles}>
       <div>
-        {size(instances) ? <InstancesList /> : <InstancesPlaceholder />}
+        {size(instances) ? (
+          <InstancesList instances={instances} />
+        ) : (
+          <InstancesPlaceholder />
+        )}
       </div>
 
       <Sidebar>sidebar</Sidebar>

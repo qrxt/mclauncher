@@ -29,7 +29,8 @@
       "types": ["./src/types"],
       "theme/*": ["./src/theme/*"],
       "theme": ["./src/theme"],
-      "assets/*": ["./srs/assets"]
+      "assets/*": ["./src/assets"],
+      "messages": ["./src/messages"]
     }
   },
   "include": ["src", "__tests__"],
