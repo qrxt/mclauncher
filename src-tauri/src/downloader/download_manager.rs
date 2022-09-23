@@ -10,20 +10,17 @@ use crate::domain::version::Download;
 use crate::instances::instance::InstanceError;
 
 pub struct Downloader {
-    pub client: reqwest::Client,
-    downloads: Vec<Download>,
+    pub downloads: Vec<Download>,
 }
 
 impl Downloader {
     pub fn new(downloads: Vec<Download>) -> Self {
-        Downloader {
-            client: Client::new(),
-            downloads,
-        }
+        Downloader { downloads }
     }
 
     async fn download_to(&self, url: &str, to: &str) -> Result<(), InstanceError> {
-        let resp = self.client.get(url).send().await?.bytes().await?;
+        let client = Client::new();
+        let resp = client.get(url).send().await?.bytes().await?;
         let mut resp = resp.as_ref();
 
         let (path, _) = to.rsplit_once('/').unwrap();
@@ -48,10 +45,13 @@ impl Downloader {
         !path_exists
     }
 
-    pub async fn download_all(&self) -> Result<(), InstanceError> {
+    pub async fn download_all(
+        &'static self,
+        downloads: Vec<Download>,
+    ) -> Result<(), InstanceError> {
         let fetches = futures::stream::iter(
-            self.downloads
-                .iter()
+            downloads
+                .into_iter()
                 .filter(|download| self.check_if_exists(download))
                 .map(|download| async move {
                     self.download_to(&download.url, &download.path).await?;
@@ -63,7 +63,6 @@ impl Downloader {
         .collect::<Vec<Result<(), InstanceError>>>();
 
         fetches.await;
-
         Ok(())
     }
 }

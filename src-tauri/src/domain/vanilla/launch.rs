@@ -43,8 +43,8 @@ impl Default for LaunchArguments {
 }
 
 pub async fn launch(instance: &Instance) -> Result<(), InstanceError> {
-    let libraries_list_file_content =
-        tokio::fs::read(get_libraries_string_file_path(instance).unwrap()).await?;
+    let libraries_string_file_path = get_libraries_string_file_path(instance).unwrap();
+    let libraries_list_file_content = tokio::fs::read(libraries_string_file_path).await?;
     let libs_string = std::str::from_utf8(&libraries_list_file_content).unwrap();
     let (asset_index, _) = instance.version.rsplit_once('.').unwrap();
     let natives_path = get_natives_path(instance).unwrap();

@@ -6,10 +6,13 @@
 use crate::client::launcher_client::ClientError;
 use crate::client::log::setup_logger;
 use crate::domain::os::OS;
+use crate::downloader::download_manager::Downloader;
 use crate::instances::instance::Instance;
+use crate::instances::instance::InstanceSubtype;
 use async_once::AsyncOnce;
 use client::launcher_client::LauncherClient;
 use lazy_static::lazy_static;
+use log::{error, info};
 use std::{env::consts, str::FromStr};
 
 mod client;
@@ -31,21 +34,50 @@ lazy_static! {
     });
 }
 
+lazy_static! {
+    static ref DOWNLOADER: AsyncOnce<Downloader> = AsyncOnce::new(async {
+        let mut downloader = Downloader::new(Vec::new());
+
+        downloader
+    });
+}
+
 #[tauri::command]
 async fn get_instances() -> &'static Vec<Instance> {
     let client = CLIENT.get().await;
+    info!("Fetching instances");
 
     &client.instances
 }
 
-// #[tauri::command]
-// async fn launch_instance(name: &str) -> Result<(), ()> {
-//     let client = CLIENT.get().await;
+#[tauri::command]
+async fn launch_instance(name: &str) -> Result<(), ()> {
+    let client = CLIENT.get().await;
+    let downloader = DOWNLOADER.get().await;
 
-//     client.launch_instance(name).await;
+    match client.launch_instance(name, downloader).await {
+        Ok(_) => info!("Instance successfully launched"),
+        Err(e) => error!("Failed to launch instance: {}", e),
+    }
 
-//     Ok(())
-// }
+    Ok(())
+}
+
+#[tauri::command]
+async fn add_instance(name: &str, version: &str, subtype: InstanceSubtype) -> Result<(), ()> {
+    let mut client = CLIENT.get().await.to_owned();
+
+    let result = client
+        .add_instance(name.to_string(), subtype, version.to_string())
+        .await;
+
+    match result {
+        Ok(_) => info!("Instance successfully created: {}", &name),
+        Err(e) => error!("Failed to add instance: {}", e),
+    }
+
+    Ok(())
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -69,7 +101,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // client.launch_instance(name).await?;
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_instances])
+        .invoke_handler(tauri::generate_handler![
+            get_instances,
+            launch_instance,
+            add_instance
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 

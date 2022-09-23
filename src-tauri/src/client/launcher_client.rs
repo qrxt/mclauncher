@@ -2,6 +2,7 @@ use std::path::Path;
 
 use crate::{
     domain::os::OS,
+    downloader::download_manager::Downloader,
     instances::instance::{Instance, InstanceSubtype},
     launcher_config::config::{
         get_base_path, get_instances_storage_path, get_log_path, get_logs_path,
@@ -143,7 +144,11 @@ impl LauncherClient {
     // pub async fn edit(&self) -> Result<(), ClientError> {
     // }
 
-    pub async fn launch_instance(&self, name: &str) -> Result<(), ClientError> {
+    pub async fn launch_instance(
+        &'static self,
+        name: &str,
+        downloader: &'static Downloader,
+    ) -> Result<(), ClientError> {
         let fitting_instance_option = self.instances.iter().find(|instance| instance.name == name);
         let instance = match fitting_instance_option {
             Some(instance) => instance,
@@ -157,8 +162,9 @@ impl LauncherClient {
         // install if needed
         let timer = Instant::now();
 
+        // TODO! fix
         if !instance.is_installed() {
-            let installation = instance.install(self).await;
+            let installation = instance.install(self, downloader).await;
 
             if let Err(e) = installation {
                 return Err(ClientError::InstallInstance(format!(

@@ -82,12 +82,16 @@ pub struct Instance {
 
 #[derive(Debug, Error)]
 pub enum InstanceError {
+    #[error("Failed to download required files: {0}")]
+    DownloadFiles(String),
     #[error("Failed to get data for instance: {0}")]
     GetData(#[from] reqwest::Error),
     #[error("Failed to get local data for instance: {0}")]
     GetLocalData(String),
     #[error("IO error: {0}")]
     IOError(#[from] io::Error),
+    #[error("Failed to install instance: {0}")]
+    Install(String),
 }
 
 impl Instance {
@@ -107,16 +111,21 @@ impl Instance {
         }
     }
 
-    pub async fn install(&self, client: &LauncherClient) -> Result<(), InstanceError> {
+    pub async fn install(
+        &self,
+        client: &'static LauncherClient,
+        downloader: &'static Downloader,
+    ) -> Result<(), InstanceError> {
         let list_of_downloads = self
             .get_required_parts(client)
             .await?
             .into_iter()
             .collect::<Vec<Download>>();
 
-        let downloader = Downloader::new(list_of_downloads);
+        // let downloader = Downloader::new(list_of_downloads);
 
-        downloader.download_all().await?;
+        // downloader.downloads = list_of_downloads;
+        downloader.download_all(list_of_downloads).await?;
 
         let delimiter = match client.os {
             OS::Windows => ";",
@@ -127,12 +136,9 @@ impl Instance {
         let libraries_path = get_libraries_path(client).unwrap();
         let libraries_string = get_libraries_list(&libraries_path, delimiter);
         let libraries_string = get_libraries_str(self, &libraries_string, delimiter).unwrap(); // TODO: remove unwrap
+        let libraries_string_path = get_libraries_string_file_path(self).unwrap();
 
-        tokio::fs::write(
-            get_libraries_string_file_path(self).unwrap(),
-            &libraries_string,
-        )
-        .await?;
+        tokio::fs::write(libraries_string_path, &libraries_string).await?;
 
         Ok(())
     }

@@ -7,6 +7,7 @@ import { getInstances } from "messages";
 function InstancesContainer() {
   const [instances, setInstances] = useState<Instance[]>([]);
   useEffect(() => {
+    console.log("Fetching instances");
     invoke(getInstances).then((instances) => {
       setInstances(instances as Instance[]);
     });
