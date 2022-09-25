@@ -39,8 +39,6 @@ pub enum ClientError {
     InstallInstance(String),
     #[error("IO error: {0}")]
     IOError(#[from] io::Error),
-    #[error("Failed to fetch data: {0}")]
-    FetchData(String),
 }
 
 pub async fn read_instances_json(client: &LauncherClient) -> InstancesJson {

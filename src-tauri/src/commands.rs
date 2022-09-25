@@ -5,7 +5,6 @@ use crate::instances::instance::InstanceSubtype;
 use crate::CLIENT;
 use crate::DOWNLOADER;
 use log::{error, info};
-use minecraft_launcher::client::launcher_client::ClientError;
 
 #[tauri::command]
 pub async fn get_versions() -> Result<Vec<String>, ()> {
