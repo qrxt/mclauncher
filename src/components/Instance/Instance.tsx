@@ -4,9 +4,11 @@ import {
   instanceCardStyles,
   instanceIconWrapperStyles,
   instanceNameStyles,
+  instanceIconStyles,
 } from "./Instance.style";
 import { invoke } from "@tauri-apps/api/tauri";
 import { launchInstance } from "messages";
+import mcIcon from "../../assets/icons/mc.png";
 
 interface InstanceProps {
   instance: Instance;
@@ -26,7 +28,9 @@ function InstanceCard(props: InstanceProps) {
       onDoubleClick={() => handleDoubleClick(instance.name)}
     >
       <header css={instanceNameStyles}>{instance.name}</header>
-      <div css={instanceIconWrapperStyles}></div>
+      <div css={instanceIconWrapperStyles}>
+        <img css={instanceIconStyles} src={mcIcon} width="64" height="64" />
+      </div>
     </div>
   );
 }

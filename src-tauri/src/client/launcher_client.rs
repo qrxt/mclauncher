@@ -8,7 +8,7 @@ use crate::{
         get_base_path, get_instances_storage_path, get_log_path, get_logs_path,
     },
 };
-use log::info;
+use log::{error, info};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 use tokio::{
@@ -18,8 +18,8 @@ use tokio::{
 };
 
 #[derive(Debug, Serialize, Deserialize)]
-struct InstancesJson {
-    instances: Vec<Instance>,
+pub struct InstancesJson {
+    pub instances: Vec<Instance>,
 }
 
 #[derive(Clone)]
@@ -39,11 +39,15 @@ pub enum ClientError {
     InstallInstance(String),
     #[error("IO error: {0}")]
     IOError(#[from] io::Error),
+    #[error("Failed to fetch data: {0}")]
+    FetchData(String),
 }
 
-async fn read_instances_json(client: &LauncherClient) -> InstancesJson {
+pub async fn read_instances_json(client: &LauncherClient) -> InstancesJson {
     let instances_json_path = get_instances_storage_path(client).unwrap();
+
     let instances_content = fs::read(instances_json_path).await;
+
     let instances_slice = match instances_content {
         Ok(instances) => instances,
         Err(_) => Vec::new(),
@@ -101,7 +105,7 @@ impl LauncherClient {
         name: String,
         subtype: InstanceSubtype,
         version: String,
-    ) -> Result<&Self, ClientError> {
+    ) -> Result<(), ClientError> {
         // check if there are no instances with this name
         let is_instance_exist = &self.instances.iter().any(|instance| instance.name == name);
 
@@ -115,16 +119,29 @@ impl LauncherClient {
         let instance_local_data = Instance::new(self, name, subtype, version);
 
         // write to instances.json
-        self.instances.push(instance_local_data);
+        let mut new_instances = self.instances.clone();
+        new_instances.push(instance_local_data);
+        self.instances = new_instances.clone();
+
         let new_instances_json = InstancesJson {
-            instances: self.instances.clone(),
+            instances: new_instances.clone(),
         };
         let stringified = serde_json::to_string(&new_instances_json).unwrap();
 
-        match fs::write("./launcher/instances.json", stringified.as_bytes()).await {
-            Ok(_) => Ok(self),
-            Err(e) => Err(ClientError::CreateInstance(e.to_string())),
-        }
+        tokio::spawn(async move {
+            match fs::write("./launcher/instances.json", stringified.as_bytes()).await {
+                Ok(_) => {
+                    info!("Instance created")
+                }
+                Err(e) => {
+                    error!("Failed to create instance: {}", e)
+                }
+            }
+        });
+
+        // Err(ClientError::CreateInstance(e.to_string()))
+
+        Ok(())
     }
 
     // pub async fn delete(&mut self, name: &str) -> Result<(), ClientError> {
@@ -149,7 +166,10 @@ impl LauncherClient {
         name: &str,
         downloader: &'static Downloader,
     ) -> Result<(), ClientError> {
-        let fitting_instance_option = self.instances.iter().find(|instance| instance.name == name);
+        // let fitting_instance_option = self.instances.iter().find(|instance| instance.name == name);
+        let instances = read_instances_json(self).await.instances;
+        let fitting_instance_option = instances.iter().find(|instance| instance.name == name);
+
         let instance = match fitting_instance_option {
             Some(instance) => instance,
             None => {

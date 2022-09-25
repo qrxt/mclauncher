@@ -10,6 +10,10 @@ export const instancesStyles = css`
   grid-template-columns: 1fr 150px;
 `;
 
+export const instancesListWrapperStyles = css`
+  padding: 25px;
+`;
+
 export const instancesPlaceholderStyles = css`
   display: flex;
   justify-content: center;
@@ -17,4 +21,20 @@ export const instancesPlaceholderStyles = css`
 
   width: 100%;
   height: 100%;
+`;
+
+export const instancesListItemStyles = css`
+  &:not(:last-child) {
+    margin-right: 50px;
+  }
+`;
+
+export const instancesListStyles = css`
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  list-style: none;
 `;

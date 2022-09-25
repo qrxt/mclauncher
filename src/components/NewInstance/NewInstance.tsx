@@ -2,17 +2,28 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { invoke } from "@tauri-apps/api/tauri";
 import { addInstance } from "messages";
+import {
+  newInstanceFormInputStyles,
+  newInstanceFormStyles,
+  newInstanceFormSubmitButtonStyles,
+  newInstanceFormWrapperStyles,
+  newInstanceWrapperStyles,
+} from "./NewInstance.style";
 
 interface NewInstanceFormData {
   name: string;
   version: string;
 }
 
-function NewInstance() {
+interface NewInstanceProps {
+  versions: string[];
+}
+
+function NewInstance(props: NewInstanceProps) {
+  const { versions } = props;
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<NewInstanceFormData>();
 
@@ -21,24 +32,41 @@ function NewInstance() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {/* register your input into the hook by invoking the "register" function */}
-        <input {...register("name", { required: true })} />
+    <div css={newInstanceWrapperStyles}>
+      <div css={newInstanceFormWrapperStyles}>
+        <h1>Create new instance</h1>
+        <form onSubmit={handleSubmit(onSubmit)} css={newInstanceFormStyles}>
+          <div>
+            <input
+              placeholder="Name"
+              {...register("name", { required: true })}
+              css={newInstanceFormInputStyles}
+            />
+            <span>{errors.name && "Name field is required"}</span>
+          </div>
 
-        {/* include validation with required or other standard HTML validation rules */}
-        <input {...register("version", { required: true })} />
+          {/* <input
+            placeholder="Version"
+            {...register("version", { required: true })}
+            css={newInstanceFormInputStyles}
+          /> */}
 
-        {/* TODO!: instance subtype select */}
+          {/* TODO! fixed height select with virtualization */}
+          <select {...register("version")}>
+            {versions.map((version) => (
+              <option value={version} key={version}>
+                {version}
+              </option>
+            ))}
+          </select>
 
-        {/* errors will return when field validation fails  */}
-        {errors.name && <span>This field is required</span>}
-
-        {/* <input type="submit" /> */}
-        <button type="submit">Create</button>
-
-        {/* TODO: i18n */}
-      </form>
+          {/* {errors.name && <span>This field is required</span>} */}
+          <button type="submit" css={newInstanceFormSubmitButtonStyles}>
+            Create
+          </button>
+          {/* TODO: i18n */}
+        </form>
+      </div>
     </div>
   );
 }

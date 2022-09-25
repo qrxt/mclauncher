@@ -42,10 +42,6 @@ function Header() {
               to="/settings"
             />
           </li>
-          <li css={controlWrapperStyles}>
-            <HeaderControl name="New Instance" to="add-instance" />
-            {/* TODO: i18n */}
-          </li>
         </ul>
       </nav>
     </header>

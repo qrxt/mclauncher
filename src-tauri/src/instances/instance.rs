@@ -82,16 +82,16 @@ pub struct Instance {
 
 #[derive(Debug, Error)]
 pub enum InstanceError {
-    #[error("Failed to download required files: {0}")]
-    DownloadFiles(String),
+    // #[error("Failed to download required files: {0}")]
+    // DownloadFiles(String),
     #[error("Failed to get data for instance: {0}")]
     GetData(#[from] reqwest::Error),
     #[error("Failed to get local data for instance: {0}")]
     GetLocalData(String),
     #[error("IO error: {0}")]
     IOError(#[from] io::Error),
-    #[error("Failed to install instance: {0}")]
-    Install(String),
+    // #[error("Failed to install instance: {0}")]
+    // Install(String),
 }
 
 impl Instance {
