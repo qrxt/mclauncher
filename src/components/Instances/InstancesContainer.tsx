@@ -1,19 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Instance } from "types/instance";
 import Instances from "./Instances";
 import { invoke } from "@tauri-apps/api/tauri";
 import { getInstances } from "messages";
+import { InstancesContext } from "./context";
 
 function InstancesContainer() {
-  const [instances, setInstances] = useState<Instance[]>([]);
+  const { instances, isLoading, instancesSuccess } =
+    useContext(InstancesContext);
+
   useEffect(() => {
     console.log("Fetching instances");
-    invoke(getInstances).then((instances) => {
-      setInstances(instances as Instance[]);
-    });
-  }, []);
 
-  return <Instances instances={instances} />;
+    if (isLoading) {
+      invoke(getInstances).then((newInstances) => {
+        console.log("Found instances: ", newInstances);
+
+        instancesSuccess(newInstances as Instance[]);
+      });
+    }
+  }, [instances]);
+
+  return isLoading ? <p>Loading...</p> : <Instances instances={instances} />;
 }
 
 export default InstancesContainer;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Instance } from "types/instance";
 import {
   instancesStyles,
@@ -20,6 +20,9 @@ import instanceCardStyles, {
   instanceNameStyles,
 } from "components/Instance/Instance.style";
 import mcIcon from "../../assets/icons/mc.png";
+import filter from "lodash/filter";
+import { keys, map, omit } from "lodash";
+import SelectedInstance from "./SelectedInstance";
 
 interface InstancesProps {
   instances: Instance[];
@@ -52,13 +55,30 @@ function NewInstanceCard() {
   );
 }
 
-function InstancesList({ instances }: { instances: Instance[] }) {
+interface InstancesListProps {
+  instances: Instance[];
+  setSelectedInstance: Dispatch<SetStateAction<Instance | null>>;
+}
+
+function InstancesList(props: InstancesListProps) {
+  const { instances, setSelectedInstance } = props;
+
+  function handleListItemClick(instance: Instance) {
+    return function () {
+      setSelectedInstance(instance);
+    };
+  }
+
   return (
     <section>
       <ul css={instancesListStyles}>
         {instances.map((instance) => {
           return (
-            <li key={instance.name} css={instancesListItemStyles}>
+            <li
+              key={instance.name}
+              css={instancesListItemStyles}
+              onClick={handleListItemClick(instance)}
+            >
               <InstanceCard instance={instance} />
             </li>
           );
@@ -73,19 +93,30 @@ function InstancesList({ instances }: { instances: Instance[] }) {
 
 function Instances(props: InstancesProps) {
   const { instances } = props;
-  console.log("instances: ", instances);
+  const [selectedInstance, setSelectedInstance] = useState<Instance | null>(
+    null
+  );
 
   return (
     <section css={instancesStyles}>
       <div css={instancesListWrapperStyles}>
         {size(instances) ? (
-          <InstancesList instances={instances} />
+          <InstancesList
+            instances={instances}
+            setSelectedInstance={setSelectedInstance}
+          />
         ) : (
           <InstancesPlaceholder />
         )}
       </div>
 
-      <Sidebar>{null}</Sidebar>
+      <Sidebar>
+        {selectedInstance && (
+          <SelectedInstance selectedInstance={selectedInstance} />
+        )}
+
+        {/* TODO: Actions */}
+      </Sidebar>
     </section>
   );
 }

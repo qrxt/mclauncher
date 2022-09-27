@@ -46,6 +46,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             commands::launch_instance,
             commands::add_instance,
             commands::get_versions,
+            commands::delete_instance,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

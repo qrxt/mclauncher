@@ -142,19 +142,19 @@ impl LauncherClient {
         Ok(())
     }
 
-    // pub async fn delete(&mut self, name: &str) -> Result<(), ClientError> {
-    //     self.instances.retain(|instance| instance.name != name);
+    pub async fn delete(&mut self, name: &str) -> Result<(), ClientError> {
+        self.instances.retain(|instance| instance.name != name);
 
-    //     let new_instances_json = InstancesJson {
-    //         instances: self.instances.clone(),
-    //     };
-    //     let stringified = serde_json::to_string(&new_instances_json).unwrap();
+        let new_instances_json = InstancesJson {
+            instances: self.instances.clone(),
+        };
+        let stringified = serde_json::to_string(&new_instances_json).unwrap();
 
-    //     match fs::write("./launcher/instances.json", stringified.as_bytes()).await {
-    //         Ok(_) => Ok(()),
-    //         Err(e) => Err(ClientError::CreateInstance(e.to_string())),
-    //     }
-    // }
+        match fs::write("./launcher/instances.json", stringified.as_bytes()).await {
+            Ok(_) => Ok(()),
+            Err(e) => Err(ClientError::CreateInstance(e.to_string())),
+        }
+    }
 
     // pub async fn edit(&self) -> Result<(), ClientError> {
     // }

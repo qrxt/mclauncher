@@ -2,17 +2,23 @@ import { invoke } from "@tauri-apps/api";
 import { getVersions } from "messages";
 import React, { useEffect, useState } from "react";
 import NewInstance from "./NewInstance";
+import { Version } from "types/version";
+import size from "lodash/size";
 
 function NewInstanceContainer() {
-  const [versions, setVersions] = useState<string[]>([]);
+  const [versions, setVersions] = useState<Version[]>([]);
   useEffect(() => {
     console.log("Fetching versions");
     invoke(getVersions).then((instances) => {
-      setVersions(instances as string[]);
+      setVersions(instances as Version[]);
     });
   }, [setVersions]);
 
-  return <NewInstance versions={versions} />;
+  return size(versions) ? (
+    <NewInstance versions={versions} />
+  ) : (
+    <p>Loading...</p>
+  );
 }
 
 export default NewInstanceContainer;

@@ -18,8 +18,7 @@ impl Downloader {
         Downloader { downloads }
     }
 
-    async fn download_to(&self, url: &str, to: &str) -> Result<(), InstanceError> {
-        let client = Client::new();
+    async fn download_to(&self, url: &str, to: &str, client: &Client) -> Result<(), InstanceError> {
         let resp = client.get(url).send().await?.bytes().await?;
         let mut resp = resp.as_ref();
 
@@ -54,7 +53,9 @@ impl Downloader {
                 .into_iter()
                 .filter(|download| self.check_if_exists(download))
                 .map(|download| async move {
-                    self.download_to(&download.url, &download.path).await?;
+                    let client = Client::new();
+                    self.download_to(&download.url, &download.path, &client)
+                        .await?;
 
                     Ok(())
                 }),
@@ -66,3 +67,12 @@ impl Downloader {
         Ok(())
     }
 }
+
+// tokio::spawn(async move {
+//     let download_result = self.download_to(&download.url, &download.path).await;
+
+//     match download_result {
+//         Ok(_) => info!("Resource {} successfully downloaded", &download.path),
+//         Err(_) => error!("Failed to download {}", &download.path),
+//     }
+// });
