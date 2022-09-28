@@ -8,9 +8,10 @@ import size from "lodash/size";
 function NewInstanceContainer() {
   const [versions, setVersions] = useState<Version[]>([]);
   useEffect(() => {
-    console.log("Fetching versions");
-    invoke(getVersions).then((instances) => {
-      setVersions(instances as Version[]);
+    console.log("Fetching versions...");
+    invoke(getVersions).then((versions) => {
+      console.log("Found versions: ", versions);
+      setVersions(versions as Version[]);
     });
   }, [setVersions]);
 

@@ -43,12 +43,15 @@ fn get_client_mappings(instance: &Instance, version_manifest: &VersionManifest) 
     let version_download = &version_manifest.downloads.client_mappings;
     let path = get_client_mappings_path(instance).unwrap();
 
-    vec![Download {
-        path,
-        sha1: version_download.sha1.to_string(),
-        size: version_download.size,
-        url: version_download.url.to_string(),
-    }]
+    match version_download {
+        Some(download) => vec![Download {
+            path,
+            sha1: download.sha1.to_string(),
+            size: download.size,
+            url: download.url.to_string(),
+        }],
+        None => vec![],
+    }
 }
 
 fn get_asset_index(
@@ -108,7 +111,7 @@ fn get_common_libraries(version_manifest: &VersionManifest, os: OS) -> Vec<&Down
         .iter()
         .filter(|lib| !is_for_unsupported_os(lib, &os))
         .filter(|lib| lib.downloads.classifiers.is_none())
-        .map(|lib| &lib.downloads.artifact)
+        .filter_map(|lib| lib.downloads.artifact.as_ref())
         .collect()
 }
 

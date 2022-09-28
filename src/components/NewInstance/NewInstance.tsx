@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { invoke } from "@tauri-apps/api/tauri";
 import { addInstance } from "messages";
@@ -12,6 +12,7 @@ import {
   newInstanceWrapperStyles,
 } from "./NewInstance.style";
 import { Version } from "types/version";
+import { useTranslation } from "react-i18next";
 
 interface NewInstanceFormData {
   name: string;
@@ -31,6 +32,7 @@ function useFilteredVersions(versions: Version[], onlyReleases: boolean) {
 }
 
 function NewInstance(props: NewInstanceProps) {
+  const { t } = useTranslation();
   const { versions } = props;
   const {
     register,
@@ -42,8 +44,6 @@ function NewInstance(props: NewInstanceProps) {
     versions,
     shouldShowOnlyReleases
   );
-
-  console.log(versions, filteredVersions);
 
   const onSubmit: SubmitHandler<NewInstanceFormData> = (data) => {
     invoke(addInstance, { ...data, subtype: "Vanilla" });
@@ -68,13 +68,6 @@ function NewInstance(props: NewInstanceProps) {
             />
             <span>{errors.name && "Name field is required"}</span>
           </div>
-
-          {/* <input
-            placeholder="Version"
-            {...register("version", { required: true })}
-            css={newInstanceFormInputStyles}
-          /> */}
-
           {/* TODO! fixed height select with virtualization */}
           <label>
             <input
@@ -95,9 +88,8 @@ function NewInstance(props: NewInstanceProps) {
 
           {/* {errors.name && <span>This field is required</span>} */}
           <button type="submit" css={newInstanceFormSubmitButtonStyles}>
-            Create
+            {t("instances.actions.create")}
           </button>
-          {/* TODO: i18n */}
         </form>
       </div>
     </div>

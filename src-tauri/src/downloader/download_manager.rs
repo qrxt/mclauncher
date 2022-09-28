@@ -11,11 +11,15 @@ use crate::instances::instance::InstanceError;
 
 pub struct Downloader {
     pub downloads: Vec<Download>,
+    client: Option<Client>,
 }
 
 impl Downloader {
     pub fn new(downloads: Vec<Download>) -> Self {
-        Downloader { downloads }
+        Downloader {
+            downloads,
+            client: Some(Client::new()),
+        }
     }
 
     async fn download_to(&self, url: &str, to: &str, client: &Client) -> Result<(), InstanceError> {
@@ -44,17 +48,15 @@ impl Downloader {
         !path_exists
     }
 
-    pub async fn download_all(
-        &'static self,
-        downloads: Vec<Download>,
-    ) -> Result<(), InstanceError> {
+    pub async fn download_all(&self, downloads: Vec<Download>) -> Result<(), InstanceError> {
+        let client = self.client.as_ref().unwrap();
+
         let fetches = futures::stream::iter(
             downloads
                 .into_iter()
                 .filter(|download| self.check_if_exists(download))
                 .map(|download| async move {
-                    let client = Client::new();
-                    self.download_to(&download.url, &download.path, &client)
+                    self.download_to(&download.url, &download.path, client)
                         .await?;
 
                     Ok(())
@@ -67,12 +69,3 @@ impl Downloader {
         Ok(())
     }
 }
-
-// tokio::spawn(async move {
-//     let download_result = self.download_to(&download.url, &download.path).await;
-
-//     match download_result {
-//         Ok(_) => info!("Resource {} successfully downloaded", &download.path),
-//         Err(_) => error!("Failed to download {}", &download.path),
-//     }
-// });

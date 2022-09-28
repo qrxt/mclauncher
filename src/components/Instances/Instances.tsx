@@ -20,8 +20,6 @@ import instanceCardStyles, {
   instanceNameStyles,
 } from "components/Instance/Instance.style";
 import mcIcon from "../../assets/icons/mc.png";
-import filter from "lodash/filter";
-import { keys, map, omit } from "lodash";
 import SelectedInstance from "./SelectedInstance";
 
 interface InstancesProps {
@@ -42,11 +40,14 @@ function InstancesPlaceholder() {
 }
 
 function NewInstanceCard() {
+  const { t } = useTranslation();
+
   return (
     <Link to="/add-instance">
       <div tabIndex={0} css={instanceCardStyles}>
-        {/* TODO: Add i18n */}
-        <header css={instanceNameStyles}>Add new instance</header>
+        <header css={instanceNameStyles}>
+          {t("instances.actions.addNewInstance")}
+        </header>
         <div css={instanceIconWrapperStyles}>
           <img css={instanceIconStyles} src={mcIcon} width="64" height="64" />
         </div>
@@ -114,8 +115,6 @@ function Instances(props: InstancesProps) {
         {selectedInstance && (
           <SelectedInstance selectedInstance={selectedInstance} />
         )}
-
-        {/* TODO: Actions */}
       </Sidebar>
     </section>
   );

@@ -1,12 +1,19 @@
 {
   "translation": {
+    "languages.en": "Английский",
+    "languages.ru": "Русский",
+
     "header.title": "Шапка",
     "header.controls.instances.name": "Сборки",
     "header.controls.settings.name": "Настройки",
 
     "instances.title": "Сборки",
     "instances.actions.addNewInstance": "Добавить сборку",
+    "instances.actions.delete": "Удалить сборку",
+    "instances.actions.create": "Создать",
 
-    "settings.title": "Настройки"
+    "settings.title": "Настройки",
+    "settings.language": "Язык приложения",
+    "settings.actions.submit": "Подтвердить"
   }
 }

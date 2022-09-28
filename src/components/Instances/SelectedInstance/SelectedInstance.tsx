@@ -12,7 +12,9 @@ import {
   selectedInstanceActionsStyles,
   selectedInstanceTitleStyles,
   selectedInstanceActionsItemStyles,
+  selectedInstanceActionStyles,
 } from "./SelectedInstance.style";
+import { useTranslation } from "react-i18next";
 
 interface SelectedInstanceProps {
   selectedInstance: Instance;
@@ -22,6 +24,7 @@ function SelectedInstance(props: SelectedInstanceProps) {
   const { selectedInstance } = props;
   const { name, subtype, version } = selectedInstance;
   const { instancesLoading } = useContext(InstancesContext);
+  const { t } = useTranslation();
 
   function handleDelete({ name }: Instance) {
     return function () {
@@ -56,9 +59,11 @@ function SelectedInstance(props: SelectedInstanceProps) {
 
         <ul css={selectedInstanceActionsStyles}>
           <li css={selectedInstanceActionsItemStyles}>
-            <button onClick={handleDelete(selectedInstance)}>
-              Delete
-              {/* TODO: i18n */}
+            <button
+              onClick={handleDelete(selectedInstance)}
+              css={selectedInstanceActionStyles}
+            >
+              {t("instances.actions.delete")}
             </button>
           </li>
         </ul>

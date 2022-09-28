@@ -60,8 +60,6 @@ export const InstancesContext =
 const Provider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  console.log("state", state);
-
   const value = {
     instances: state.instances,
     isLoading: state.isLoading,

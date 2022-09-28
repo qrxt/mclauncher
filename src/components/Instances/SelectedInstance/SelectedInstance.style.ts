@@ -24,8 +24,19 @@ export const selectedInstanceActionsWrapperStyles = css`
   /*  */
 `;
 
-export const selectedInstanceTitleStyles = css``;
+export const selectedInstanceTitleStyles = css`
+  margin: 0;
+  margin-bottom: 5px;
+`;
 
-export const selectedInstanceActionsStyles = css``;
+export const selectedInstanceActionsStyles = css`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`;
 
 export const selectedInstanceActionsItemStyles = css``;
+
+export const selectedInstanceActionStyles = css`
+  width: 100%;
+`;

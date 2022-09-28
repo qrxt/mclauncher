@@ -1,12 +1,19 @@
 {
   "translation": {
+    "languages.en": "English",
+    "languages.ru": "Russian",
+
     "header.title": "Header",
     "header.controls.instances.name": "Instances",
     "header.controls.settings.name": "Settings",
 
     "instances.title": "Instances",
     "instances.actions.addNewInstance": "Add new instance",
+    "instances.actions.delete": "Delete instance",
+    "instances.actions.create": "Create",
 
-    "settings.title": "Settings"
+    "settings.title": "Settings",
+    "settings.language": "Language",
+    "settings.actions.submit": "Submit"
   }
 }

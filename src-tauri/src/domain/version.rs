@@ -55,7 +55,7 @@ pub struct VersionManifest {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct VersionDownloads {
     pub client: VersionDownload,
-    pub client_mappings: VersionDownload,
+    pub client_mappings: Option<VersionDownload>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -85,7 +85,7 @@ pub struct VersionLibrary {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct LibraryArtifact {
-    pub artifact: Download,
+    pub artifact: Option<Download>,
     pub classifiers: Option<Classifier>,
 }
 
