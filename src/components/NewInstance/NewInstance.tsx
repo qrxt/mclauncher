@@ -58,15 +58,17 @@ function NewInstance(props: NewInstanceProps) {
   return (
     <div css={newInstanceWrapperStyles}>
       <div css={newInstanceFormWrapperStyles}>
-        <h1>Create new instance</h1>
+        <h2>{t("newInstance.title")}</h2>
         <form onSubmit={handleSubmit(onSubmit)} css={newInstanceFormStyles}>
           <div>
             <input
-              placeholder="Name"
+              placeholder={t("newInstance.form.fields.name.title")}
               {...register("name", { required: true })}
               css={newInstanceFormInputStyles}
             />
-            <span>{errors.name && "Name field is required"}</span>
+            <span>
+              {errors.name && t("newInstance.form.fields.name.required")}
+            </span>
           </div>
           {/* TODO! fixed height select with virtualization */}
           <label>
@@ -76,7 +78,7 @@ function NewInstance(props: NewInstanceProps) {
               checked={shouldShowOnlyReleases}
               onChange={handleShouldShowSnapshots}
             />
-            <span>Show only releases</span>
+            <span>{t("newInstance.showOnlyReleases")}</span>
           </label>
           <select {...register("version")} css={newInstanceFormInputStyles}>
             {map(filteredVersions, ({ id: version }) => (
@@ -86,9 +88,8 @@ function NewInstance(props: NewInstanceProps) {
             ))}
           </select>
 
-          {/* {errors.name && <span>This field is required</span>} */}
           <button type="submit" css={newInstanceFormSubmitButtonStyles}>
-            {t("instances.actions.create")}
+            {t("newInstance.actions.create")}
           </button>
         </form>
       </div>

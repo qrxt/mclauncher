@@ -39,23 +39,23 @@ function SelectedInstance(props: SelectedInstanceProps) {
       <h3 css={selectedInstanceTitleStyles}>Instance info</h3>
       <dl>
         <div css={selectedInstanceInfoWrapperStyles}>
-          <dt css={selectedInstanceInfoTitleStyles}>Name</dt>
+          <dt css={selectedInstanceInfoTitleStyles}>{t("instance.name")}</dt>
           <dd css={selectedInstanceInfoStyles}>{name}</dd>
         </div>
 
         <div css={selectedInstanceInfoWrapperStyles}>
-          <dt css={selectedInstanceInfoTitleStyles}>Instance type</dt>
+          <dt css={selectedInstanceInfoTitleStyles}>{t("instance.type")}</dt>
           <dd css={selectedInstanceInfoStyles}>{subtype}</dd>
         </div>
 
         <div css={selectedInstanceInfoWrapperStyles}>
-          <dt css={selectedInstanceInfoTitleStyles}>Version</dt>
+          <dt css={selectedInstanceInfoTitleStyles}>{t("instance.version")}</dt>
           <dd css={selectedInstanceInfoStyles}>{version}</dd>
         </div>
       </dl>
 
       <div css={selectedInstanceActionsWrapperStyles}>
-        <h3 css={selectedInstanceTitleStyles}>Actions</h3>
+        <h3 css={selectedInstanceTitleStyles}>{t("instance.actions")}</h3>
 
         <ul css={selectedInstanceActionsStyles}>
           <li css={selectedInstanceActionsItemStyles}>
