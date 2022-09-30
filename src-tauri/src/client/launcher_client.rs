@@ -180,7 +180,6 @@ impl LauncherClient {
         // install if needed
         let timer = Instant::now();
 
-        // TODO! fix
         if !instance.is_installed() {
             let installation = instance.install(self, downloader).await;
 

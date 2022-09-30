@@ -169,3 +169,208 @@ pub fn get_required(
 
     res
 }
+
+#[cfg(test)]
+mod test_get {
+    use super::*;
+    use std::collections::HashMap;
+
+    use crate::{
+        domain::version::{
+            Asset, Classifier, LibraryArtifact, Rule, RulesOs, VersionDownload, VersionDownloads,
+        },
+        instances::instance::InstanceSubtype,
+    };
+
+    async fn setup() -> (LauncherClient, VersionManifest) {
+        let client = LauncherClient::new(OS::Linux).await;
+        let client_mappings = VersionDownload {
+            sha1: "".to_string(),
+            size: 1000,
+            url: "/client-mappings".to_string(),
+        };
+
+        let manifest = VersionManifest {
+            downloads: VersionDownloads {
+                client: VersionDownload {
+                    sha1: "".to_string(),
+                    size: 1000,
+                    url: "/client".to_string(),
+                },
+                client_mappings: Some(client_mappings),
+            },
+            libraries: vec![
+                VersionLibrary {
+                    name: "lib".to_string(),
+                    downloads: LibraryArtifact {
+                        artifact: Some(Download {
+                            path: "/libraries/lib.jar".to_string(),
+                            sha1: "sha1".to_string(),
+                            size: 1000,
+                            url: "/lib".to_string(),
+                        }),
+                        classifiers: None,
+                    },
+                    rules: None,
+                },
+                VersionLibrary {
+                    name: "linux_lib".to_string(),
+                    downloads: LibraryArtifact {
+                        artifact: None,
+                        classifiers: Some(Classifier {
+                            natives_linux: Some(Download {
+                                path: "/libraries/linux-lib.jar".to_string(),
+                                sha1: "sha1".to_string(),
+                                size: 1000,
+                                url: "/lib".to_string(),
+                            }),
+                            natives_windows: None,
+                        }),
+                    },
+                    rules: Some(vec![Rule {
+                        action: Some("allow".to_string()),
+                        os: Some(RulesOs {
+                            name: Some("linux".to_string()),
+                        }),
+                    }]),
+                },
+            ],
+            asset_index: VersionManifestAssetsIndex {
+                id: "7x0j1klxz".to_string(),
+                url: "/asset-index".to_string(),
+                sha1: "sha1".to_string(),
+                size: 1000,
+            },
+        };
+
+        (client, manifest)
+    }
+
+    fn setup_instance(client: &LauncherClient) -> Instance {
+        Instance::new(
+            client,
+            "test instance".to_string(),
+            InstanceSubtype::Vanilla,
+            "1.16.5".to_string(),
+        )
+    }
+
+    fn setup_assets_index_info() -> VersionManifestAssetsIndex {
+        VersionManifestAssetsIndex {
+            id: "".to_string(),
+            url: "/assets-index".to_string(),
+            sha1: "".to_string(),
+            size: 1000,
+        }
+    }
+
+    #[tokio::test]
+    async fn test_get_version_jar() {
+        let (client, manifest) = setup().await;
+        let instance = setup_instance(&client);
+
+        let version_jar = &get_version_jar(&instance, &manifest)[0];
+
+        assert_eq!(version_jar.url, "/client");
+    }
+
+    #[tokio::test]
+    async fn test_get_client_mappings() {
+        let (client, manifest) = setup().await;
+        let instance = setup_instance(&client);
+
+        let client_mappings = &get_client_mappings(&instance, &manifest)[0];
+
+        assert_eq!(client_mappings.url, "/client-mappings");
+    }
+
+    #[tokio::test]
+    async fn test_get_asset_index() {
+        let (client, _) = setup().await;
+        let assets_index_info = setup_assets_index_info();
+
+        let client_mappings = &get_asset_index(&client, &assets_index_info)[0];
+
+        assert_eq!(client_mappings.url, "/assets-index");
+    }
+
+    fn setup_assets(test_hash: &str) -> AssetsIndex {
+        let asset = Asset {
+            hash: test_hash.to_string(),
+            size: 1000,
+        };
+
+        let mut objects: HashMap<String, Asset> = HashMap::new();
+        objects.insert(
+            "minecraft/sounds/block/fence_gate/open2.ogg".to_string(),
+            asset,
+        );
+
+        AssetsIndex { objects }
+    }
+
+    #[tokio::test]
+    async fn test_get_assets() {
+        let (client, _) = setup().await;
+        let test_hash = "test_hash";
+        let assets_index = setup_assets(test_hash);
+
+        let asset = &get_assets(&client, &assets_index)[0];
+
+        assert_eq!(
+            asset.url,
+            "http://resources.download.minecraft.net/te/test_hash"
+        );
+    }
+
+    #[tokio::test]
+    async fn test_is_for_unsupported_os() {
+        let rules = vec![Rule {
+            action: Some("allow".to_string()),
+            os: Some(RulesOs {
+                name: Some("macos".to_string()),
+            }),
+        }];
+        let version_library = VersionLibrary {
+            name: "macos_lib".to_string(),
+            downloads: LibraryArtifact {
+                artifact: None,
+                classifiers: None,
+            },
+            rules: Some(rules),
+        };
+
+        let is_not_supported = is_for_unsupported_os(&version_library, &OS::Linux);
+
+        assert!(is_not_supported);
+    }
+
+    #[tokio::test]
+    async fn test_get_common_libraries() {
+        let (_, version_manifest) = setup().await;
+
+        let downloads = get_common_libraries(&version_manifest, OS::Linux);
+
+        assert_eq!(downloads.len(), 1);
+        assert_eq!(downloads[0].path, "/libraries/lib.jar");
+    }
+
+    #[tokio::test]
+    async fn test_get_native_libraries() {
+        let (_, version_manifest) = setup().await;
+
+        let downloads = get_native_libraries(&version_manifest, OS::Linux);
+
+        assert_eq!(downloads.len(), 1);
+        assert_eq!(downloads[0].path, "/libraries/linux-lib.jar");
+    }
+
+    #[tokio::test]
+    async fn test_get_all_libraries() {
+        let (client, version_manifest) = setup().await;
+
+        let downloads = get_all_libraries(&client, &version_manifest);
+
+        assert_eq!(downloads.len(), 2);
+    }
+}

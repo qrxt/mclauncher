@@ -135,7 +135,7 @@ impl Instance {
         // you'll need a list of all libraries for the -сp launch parameter
         let libraries_path = get_libraries_path(client).unwrap();
         let libraries_string = get_libraries_list(&libraries_path, delimiter);
-        let libraries_string = get_libraries_str(self, &libraries_string, delimiter).unwrap(); // TODO: remove unwrap
+        let libraries_string = get_libraries_str(self, &libraries_string, delimiter).unwrap();
         let libraries_string_path = get_libraries_string_file_path(self).unwrap();
 
         tokio::fs::write(libraries_string_path, &libraries_string).await?;

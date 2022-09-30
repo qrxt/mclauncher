@@ -32,8 +32,11 @@ lazy_static! {
 }
 
 lazy_static! {
-    static ref DOWNLOADER: AsyncOnce<Downloader> =
-        AsyncOnce::new(async { Downloader::new(Vec::new()) });
+    static ref DOWNLOADER: AsyncOnce<Downloader> = AsyncOnce::new(async {
+        let client = reqwest::Client::new();
+
+        Downloader::new(client)
+    });
 }
 
 #[tokio::main]

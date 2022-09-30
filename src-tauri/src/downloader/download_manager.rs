@@ -1,8 +1,7 @@
-use std::path::Path;
-
 use futures::StreamExt;
 use log::{info, warn};
-use reqwest::Client;
+use reqwest::{Client, StatusCode};
+use std::path::Path;
 use tokio::fs::{create_dir_all, File};
 use tokio::io::{self};
 
@@ -10,32 +9,34 @@ use crate::domain::version::Download;
 use crate::instances::instance::InstanceError;
 
 pub struct Downloader {
-    pub downloads: Vec<Download>,
-    client: Option<Client>,
+    client: Client,
 }
 
 impl Downloader {
-    pub fn new(downloads: Vec<Download>) -> Self {
-        Downloader {
-            downloads,
-            client: Some(Client::new()),
-        }
+    pub fn new(client: Client) -> Self {
+        Downloader { client }
     }
 
-    async fn download_to(&self, url: &str, to: &str, client: &Client) -> Result<(), InstanceError> {
-        let resp = client.get(url).send().await?.bytes().await?;
-        let mut resp = resp.as_ref();
+    pub async fn download_to(&self, url: &str, to: &str) -> Result<StatusCode, InstanceError> {
+        let response = self.client.get(url).send().await?;
+        let status = &response.status();
+        let body = &response.bytes().await?;
+        let mut body = body.as_ref();
 
         let (path, _) = to.rsplit_once('/').unwrap();
 
+        if cfg!(test) {
+            return Ok(*status);
+        }
+
         create_dir_all(path).await?;
 
-        info!("creating {}", &to);
+        info!("Creating {}", &to);
         let mut out = File::create(&to).await?;
 
-        io::copy(&mut resp, &mut out).await?;
+        io::copy(&mut body, &mut out).await?;
 
-        Ok(())
+        Ok(*status)
     }
 
     fn check_if_exists(&self, download: &Download) -> bool {
@@ -48,24 +49,65 @@ impl Downloader {
         !path_exists
     }
 
-    pub async fn download_all(&self, downloads: Vec<Download>) -> Result<(), InstanceError> {
-        let client = self.client.as_ref().unwrap();
-
+    pub async fn download_all(
+        &self,
+        downloads: Vec<Download>,
+    ) -> Result<Vec<StatusCode>, InstanceError> {
         let fetches = futures::stream::iter(
             downloads
                 .into_iter()
                 .filter(|download| self.check_if_exists(download))
-                .map(|download| async move {
-                    self.download_to(&download.url, &download.path, client)
-                        .await?;
-
-                    Ok(())
-                }),
+                .map(
+                    |download| async move { self.download_to(&download.url, &download.path).await },
+                ),
         )
         .buffer_unordered(16)
-        .collect::<Vec<Result<(), InstanceError>>>();
+        .collect::<Vec<Result<StatusCode, InstanceError>>>();
 
-        fetches.await;
-        Ok(())
+        fetches.await.into_iter().collect()
+    }
+}
+
+#[cfg(test)]
+mod test_download_manager {
+    use super::*;
+    use httpmock::prelude::*;
+
+    #[tokio::test]
+    async fn test_multiple_downloads() {
+        let server = MockServer::start();
+
+        let mock = server.mock(|when, then| {
+            when.method(GET).any_request();
+            then.status(200)
+                .header("content-type", "application/octet-stream;")
+                .body("binary stuff");
+        });
+
+        let client = reqwest::Client::new();
+        let downloader = Downloader::new(client);
+
+        let downloads = vec![
+            Download {
+                path: "./assets".to_string(),
+                sha1: "sha1".to_string(),
+                size: 1000,
+                url: server.url("/xa/asdjhjk"),
+            },
+            Download {
+                path: "./assets".to_string(),
+                sha1: "sha1".to_string(),
+                size: 1000,
+                url: server.url("/xa/bsdjkzx"),
+            },
+        ];
+
+        let statuses = downloader.download_all(downloads).await.unwrap();
+
+        statuses
+            .into_iter()
+            .for_each(|status| assert!(status.is_success()));
+
+        mock.assert_hits(2);
     }
 }

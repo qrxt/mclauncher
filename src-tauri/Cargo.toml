@@ -29,6 +29,7 @@ log = "0.4.17"
 fern = "0.6.1"
 chrono = "0.4.22"
 async_once = "0.2.6"
+httpmock = "0.6.6"
 
 [features]
 # by default Tauri runs in production mode
