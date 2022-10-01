@@ -1,6 +1,7 @@
 import React from "react";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { addButtonIconStyles, addButtonStyles } from "./AddButton.style";
+import { Link } from "react-router-dom";
 
 export enum AddButtonVariant {
   Outlined = "outlined",
@@ -15,11 +16,18 @@ interface AddButtonProps {
 function AddButton(props: AddButtonProps) {
   const { text, variant } = props;
 
+  // return (
+  //   <button type="button" css={addButtonStyles(variant)}>
+  //     <PlusCircleIcon css={addButtonIconStyles} />
+  //     {text}
+  //   </button>
+  // );
+
   return (
-    <button type="button" css={addButtonStyles(variant)}>
+    <Link to={"/add-instance"} css={addButtonStyles(variant)}>
       <PlusCircleIcon css={addButtonIconStyles} />
       {text}
-    </button>
+    </Link>
   );
 }
 

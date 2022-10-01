@@ -1,12 +1,35 @@
 {
   "translation": {
+    "languages.en": "Английский",
+    "languages.ru": "Русский",
+
+    "launcher.title": "Лаунчер Minecraft",
+
+    "common.actions.create": "Создать",
+    "common.actions.delete": "Удалить",
+
     "header.title": "Шапка",
     "header.controls.instances.name": "Сборки",
     "header.controls.settings.name": "Настройки",
 
     "instances.title": "Сборки",
     "instances.actions.addNewInstance": "Добавить сборку",
+    "instances.actions.delete": "Удалить сборку",
+    "instances.actions.create": "Создать",
 
-    "settings.title": "Настройки"
+    "instance.name": "Имя",
+    "instance.type": "Тип сборки",
+    "instance.version": "Версия",
+    "instance.actions": "Действия",
+
+    "newInstance.title": "Создать новую сборку",
+    "newInstance.showOnlyReleases": "Только релизные версии",
+    "newInstance.actions.create": "Создать",
+    "newInstance.form.fields.name.title": "Имя",
+    "newInstance.form.fields.name.required": "Поле \"Имя\" является обязательным",
+
+    "settings.title": "Настройки",
+    "settings.language": "Язык приложения",
+    "settings.actions.submit": "Подтвердить"
   }
 }

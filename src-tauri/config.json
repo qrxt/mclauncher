@@ -1,0 +1,25 @@
+{
+  "paths": {
+    "base_path": "./launcher",
+
+    "logs": "{base_path}/logs",
+    "log": "{base_path}/logs/{log_name}.log",
+
+    "version": "{instance_path}/version.jar",
+    "client_mappings": "{instance_path}/client.txt",
+
+    "libraries": "{base_path}/libraries/",
+    "library": "{base_path}/libraries/{lib_path}",
+    "asset_index": "{base_path}/assets/indexes/{asset_index}.json",
+    "asset": "{base_path}/assets/objects/{hash_part}/{hash}",
+
+    "instances_storage": "{base_path}/instances.json",
+    "instance": "{base_path}/instances/{name}",
+    "libraries_string_file": "{instance_path}/libraries.txt",
+    "natives": "{instance_path}/bin"
+  },
+  "urls": {
+    "versions_manifest": "https://launchermeta.mojang.com/mc/game/version_manifest.json",
+    "asset": "http://resources.download.minecraft.net/{hash_part}/{hash}"
+  }
+}

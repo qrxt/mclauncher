@@ -1,12 +1,35 @@
 {
   "translation": {
+    "languages.en": "English",
+    "languages.ru": "Russian",
+
+    "launcher.title": "Minecraft Launcher",
+
+    "common.actions.create": "Create",
+    "common.actions.delete": "Delete",
+
     "header.title": "Header",
     "header.controls.instances.name": "Instances",
     "header.controls.settings.name": "Settings",
 
     "instances.title": "Instances",
     "instances.actions.addNewInstance": "Add new instance",
+    "instances.actions.delete": "Delete instance",
+    "instances.actions.create": "Create",
 
-    "settings.title": "Settings"
+    "instance.name": "Name",
+    "instance.type": "Instance type",
+    "instance.version": "Version",
+    "instance.actions": "Actions",
+
+    "newInstance.title": "Create new instance",
+    "newInstance.showOnlyReleases": "Only releases",
+    "newInstance.actions.create": "Create",
+    "newInstance.form.fields.name.title": "Name",
+    "newInstance.form.fields.name.required": "Name field is required",
+
+    "settings.title": "Settings",
+    "settings.language": "Language",
+    "settings.actions.submit": "Submit"
   }
 }

@@ -1,10 +1,11 @@
 import React from "react";
 import Page from "components/Page";
+import Settings from "components/Settings";
 
 function InstancesPage() {
   return (
     <Page>
-      <p>Settings Page</p>
+      <Settings />
     </Page>
   );
 }
