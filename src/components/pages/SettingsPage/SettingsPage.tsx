@@ -4,7 +4,7 @@ import Settings from "components/Settings";
 
 function InstancesPage() {
   return (
-    <Page>
+    <Page selectedTab="settings">
       <Settings />
     </Page>
   );

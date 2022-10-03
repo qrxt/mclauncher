@@ -5,14 +5,15 @@ import { layoutStyles } from "./Layout.style";
 
 interface LayoutProps {
   children?: React.ReactNode;
+  selectedTab: string;
 }
 
 function Layout(props: LayoutProps) {
-  const { children } = props;
+  const { children, selectedTab } = props;
 
   return (
     <div css={layoutStyles}>
-      <Header />
+      <Header selectedTab={selectedTab} />
       <Main>{children}</Main>
     </div>
   );

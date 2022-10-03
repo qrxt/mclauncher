@@ -7,6 +7,7 @@
 
     "common.actions.create": "Create",
     "common.actions.delete": "Delete",
+    "common.form.errors.fieldsRequired": "Fill in the blank fields",
 
     "header.title": "Header",
     "header.controls.instances.name": "Instances",
@@ -14,7 +15,9 @@
 
     "instances.title": "Instances",
     "instances.actions.addNewInstance": "Add new instance",
-    "instances.actions.delete": "Delete instance",
+    "instances.actions.launch": "Launch",
+    "instances.actions.delete": "Delete",
+    "instances.actions.delete.success": "Instance deleted successfully",
     "instances.actions.create": "Create",
 
     "instance.name": "Name",
@@ -25,11 +28,16 @@
     "newInstance.title": "Create new instance",
     "newInstance.showOnlyReleases": "Only releases",
     "newInstance.actions.create": "Create",
+    "newInstance.actions.create.success": "Instance added successfully",
     "newInstance.form.fields.name.title": "Name",
     "newInstance.form.fields.name.required": "Name field is required",
+    "newInstance.form.fields.version.name": "Version",
+    "newInstance.form.fields.version.selectVersion": "Select version",
+    "newInstance.form.fields.version.name.error.required": "Instance name required",
 
     "settings.title": "Settings",
     "settings.language": "Language",
-    "settings.actions.submit": "Submit"
+    "settings.actions.submit": "Submit",
+    "settings.actions.submit.success": "Settings applied successfully"
   }
 }

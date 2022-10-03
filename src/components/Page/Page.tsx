@@ -5,16 +5,17 @@ import { useTranslation } from "react-i18next";
 
 interface PageProps {
   children: React.ReactNode;
+  selectedTab: string;
 }
 
 function Page(props: PageProps) {
-  const { children } = props;
+  const { children, selectedTab } = props;
   const { t } = useTranslation();
 
   return (
     <>
       <h1 css={visuallyHidden}>{t("launcher.title")}</h1>
-      <Layout>{children}</Layout>
+      <Layout selectedTab={selectedTab}>{children}</Layout>
     </>
   );
 }

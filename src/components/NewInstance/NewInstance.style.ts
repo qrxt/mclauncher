@@ -24,7 +24,6 @@ export const newInstanceFormStyles = css`
 export const newInstanceFormInputStyles = css`
   width: 100%;
 
-  margin-bottom: 25px;
   &:not(:last-child) {
   }
 `;

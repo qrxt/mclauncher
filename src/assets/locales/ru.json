@@ -7,6 +7,7 @@
 
     "common.actions.create": "Создать",
     "common.actions.delete": "Удалить",
+    "common.form.errors.fieldsRequired": "Заполните поля",
 
     "header.title": "Шапка",
     "header.controls.instances.name": "Сборки",
@@ -14,7 +15,9 @@
 
     "instances.title": "Сборки",
     "instances.actions.addNewInstance": "Добавить сборку",
-    "instances.actions.delete": "Удалить сборку",
+    "instances.actions.delete": "Удалить",
+    "instances.actions.delete.success": "Сборка успешно удалена",
+    "instances.actions.launch": "Запустить",
     "instances.actions.create": "Создать",
 
     "instance.name": "Имя",
@@ -25,11 +28,16 @@
     "newInstance.title": "Создать новую сборку",
     "newInstance.showOnlyReleases": "Только релизные версии",
     "newInstance.actions.create": "Создать",
+    "newInstance.actions.create.success": "Сборка успешно добавлена",
     "newInstance.form.fields.name.title": "Имя",
     "newInstance.form.fields.name.required": "Поле \"Имя\" является обязательным",
+    "newInstance.form.fields.version.name": "Версия",
+    "newInstance.form.fields.version.selectVersion": "Выберите версию",
+    "newInstance.form.fields.version.name.error.required": "Введите название сборки",
 
     "settings.title": "Настройки",
     "settings.language": "Язык приложения",
-    "settings.actions.submit": "Подтвердить"
+    "settings.actions.submit": "Подтвердить",
+    "settings.actions.submit.success": "Настройки применены"
   }
 }

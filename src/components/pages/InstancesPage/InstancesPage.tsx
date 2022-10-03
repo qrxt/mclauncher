@@ -5,7 +5,7 @@ import InstancesProvider from "components/Instances/context";
 
 function InstancesPage() {
   return (
-    <Page>
+    <Page selectedTab="instances">
       <InstancesProvider>
         <InstancesContainer />
       </InstancesProvider>
