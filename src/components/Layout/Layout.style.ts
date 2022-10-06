@@ -7,7 +7,7 @@ export const layoutStyles = css`
   grid-template:
     "h"
     "m";
-  grid-template-rows: 50px 1fr;
+  grid-template-rows: 45px 1fr;
   grid-template-columns: 1fr;
   height: 100%;
 `;

@@ -4,7 +4,7 @@ import NewInstanceContainer from "components/NewInstance/NewInstanceContainer";
 
 function InstancesPage() {
   return (
-    <Page>
+    <Page selectedTab="instances">
       <NewInstanceContainer />
     </Page>
   );

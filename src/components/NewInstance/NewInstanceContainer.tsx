@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import NewInstance from "./NewInstance";
 import { Version } from "types/version";
 import size from "lodash/size";
+import LoadingScreen from "components/LoadingScreen";
 
 function NewInstanceContainer() {
   const [versions, setVersions] = useState<Version[]>([]);
@@ -18,7 +19,7 @@ function NewInstanceContainer() {
   return size(versions) ? (
     <NewInstance versions={versions} />
   ) : (
-    <p>Loading...</p>
+    <LoadingScreen />
   );
 }
 

@@ -2,9 +2,8 @@
   font-family: "Nunito";
   font-style: normal;
   font-weight: 400;
-  src: local(""),
-    url("/assets/fonts/nunito-v25-latin_cyrillic-regular.woff2") format("woff2"),
-    url("/assets/fonts/nunito-v25-latin_cyrillic-regular.woff") format("woff");
+  src: local(""), url("./assets/fonts/nunito.woff2") format("woff2"),
+    url("./assets/fonts/nunito.woff") format("woff");
 }
 
 *,
@@ -13,3 +12,8 @@
   box-sizing: border-box;
   font-family: Nunito, Helvetica, sans-serif;
 }
+
+/* -webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none; */

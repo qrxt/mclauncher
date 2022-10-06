@@ -1,15 +1,19 @@
 import { css } from "@emotion/react";
 
-export const instanceCardStyles = css`
+export const selectedInstanceCardStyles = css``;
+
+export const instanceCardStyles = ({
+  isSelected,
+}: {
+  isSelected: boolean;
+}) => css`
   display: flex;
   flex-direction: column;
 
   width: 100px;
   min-height: 150px;
 
-  &:focus {
-    outline: 1px solid red;
-  }
+  ${isSelected ? selectedInstanceCardStyles : ""}
 `;
 
 export const instanceNameStyles = css`
@@ -25,9 +29,19 @@ export const instanceIconWrapperStyles = css`
   margin-bottom: 5px;
 `;
 
-export const instanceIconStyles = css`
+export const instanceIconStyles = ({
+  isSelected,
+}: {
+  isSelected: boolean;
+}) => css`
   width: 100%;
   height: 100%;
+
+  ${isSelected
+    ? css`
+        opacity: 0.75;
+      `
+    : ""}
 `;
 
 export default instanceCardStyles;

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React from "react";
 import { Instance } from "types/instance";
 import {
   instancesStyles,
@@ -8,61 +8,54 @@ import {
   instancesListItemStyles,
 } from "./Instances.style";
 import size from "lodash/size";
-import { AddButton } from "components/buttons/AddButton";
-import { AddButtonVariant } from "components/buttons/AddButton/AddButton";
 import { useTranslation } from "react-i18next";
 import Sidebar from "components/Sidebar";
 import InstanceCard from "components/Instance/Instance";
 import { Link } from "react-router-dom";
-import instanceCardStyles, {
-  instanceIconStyles,
-  instanceIconWrapperStyles,
-  instanceNameStyles,
-} from "components/Instance/Instance.style";
-import mcIcon from "../../assets/icons/mc.png";
 import SelectedInstance from "./SelectedInstance";
+import { Button } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
+import NewInstanceCard from "components/NewInstanceCard";
 
 interface InstancesProps {
   instances: Instance[];
+  selectedInstance: Instance | null;
+  setSelectedInstance: (instance: Instance) => void;
 }
 
-function InstancesPlaceholder() {
+function AddInstanceButton() {
   const { t } = useTranslation();
 
   return (
-    <section css={instancesPlaceholderStyles}>
-      <AddButton
-        variant={AddButtonVariant.Text}
-        text={t("instances.actions.addNewInstance")}
-      />
-    </section>
+    <Link to={"/add-instance"}>
+      <Button
+        rightIcon={<AddIcon />}
+        colorScheme="purple"
+        variant="outline"
+        data-testid="instances-no-data-add-button"
+      >
+        {t("instances.actions.addNewInstance")}
+      </Button>
+    </Link>
   );
 }
 
-function NewInstanceCard() {
-  const { t } = useTranslation();
-
+function InstancesPlaceholder() {
   return (
-    <Link to="/add-instance">
-      <div tabIndex={0} css={instanceCardStyles}>
-        <header css={instanceNameStyles}>
-          {t("instances.actions.addNewInstance")}
-        </header>
-        <div css={instanceIconWrapperStyles}>
-          <img css={instanceIconStyles} src={mcIcon} width="64" height="64" />
-        </div>
-      </div>
-    </Link>
+    <div css={instancesPlaceholderStyles} data-testid="instances-no-data">
+      <AddInstanceButton />
+    </div>
   );
 }
 
 interface InstancesListProps {
   instances: Instance[];
-  setSelectedInstance: Dispatch<SetStateAction<Instance | null>>;
+  setSelectedInstance: (instance: Instance) => void;
+  selectedInstance: Instance | null;
 }
 
 function InstancesList(props: InstancesListProps) {
-  const { instances, setSelectedInstance } = props;
+  const { instances, selectedInstance, setSelectedInstance } = props;
 
   function handleListItemClick(instance: Instance) {
     return function () {
@@ -72,19 +65,26 @@ function InstancesList(props: InstancesListProps) {
 
   return (
     <section>
-      <ul css={instancesListStyles}>
+      <ul css={instancesListStyles} data-testid="instances-list">
         {instances.map((instance) => {
+          const isSelected = selectedInstance?.name === instance.name || false;
+
           return (
             <li
               key={instance.name}
               css={instancesListItemStyles}
               onClick={handleListItemClick(instance)}
+              data-testid="instances-list-item"
             >
-              <InstanceCard instance={instance} />
+              <InstanceCard instance={instance} isSelected={isSelected} />
             </li>
           );
         })}
-        <li key="new-instance" css={instancesListItemStyles}>
+        <li
+          key="new-instance"
+          css={instancesListItemStyles}
+          data-testid="instances-list-item"
+        >
           <NewInstanceCard />
         </li>
       </ul>
@@ -93,17 +93,15 @@ function InstancesList(props: InstancesListProps) {
 }
 
 function Instances(props: InstancesProps) {
-  const { instances } = props;
-  const [selectedInstance, setSelectedInstance] = useState<Instance | null>(
-    null
-  );
+  const { instances, selectedInstance, setSelectedInstance } = props;
 
   return (
-    <section css={instancesStyles}>
+    <section css={instancesStyles} data-testid="instances">
       <div css={instancesListWrapperStyles}>
         {size(instances) ? (
           <InstancesList
             instances={instances}
+            selectedInstance={selectedInstance}
             setSelectedInstance={setSelectedInstance}
           />
         ) : (
@@ -111,7 +109,7 @@ function Instances(props: InstancesProps) {
         )}
       </div>
 
-      <Sidebar>
+      <Sidebar data-testid="instances-sidebar">
         {selectedInstance && (
           <SelectedInstance selectedInstance={selectedInstance} />
         )}
