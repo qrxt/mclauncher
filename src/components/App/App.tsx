@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { appStyles } from "./App.style";
 import InstancesPage from "components/pages/InstancesPage";
 import SettingsPage from "components/pages/SettingsPage";

@@ -37,7 +37,7 @@ export interface NewInstanceProps {
 }
 
 function useFilteredVersions(versions: Version[], onlyReleases: boolean) {
-  const filteredVersions = onlyReleases
+  const filteredVersions: Version[] = onlyReleases
     ? filter(versions, (version) => version.type == "release")
     : versions;
 
@@ -91,20 +91,31 @@ function NewInstance(props: NewInstanceProps) {
     setShouldShowOnlyReleases(currentValue);
   }
 
-  console.log("errors", errors);
-
   return (
     <div css={newInstanceWrapperStyles}>
       <div css={newInstanceFormWrapperStyles}>
         <form
           onSubmit={handleSubmit(onSubmit, onSubmitFailure)}
           css={newInstanceFormStyles}
+          data-testid="new-instance-form"
         >
-          <Heading as="h2" size="md" noOfLines={1} marginBottom="6">
+          <Heading
+            as="h2"
+            size="md"
+            noOfLines={1}
+            marginBottom="6"
+            data-testid="new-instance-form-title"
+          >
             {t("newInstance.title")}
           </Heading>
-          <FormControl marginBottom={6}>
-            <FormLabel as="legend">
+          <FormControl
+            marginBottom={6}
+            data-testid="new-instance-form-text-input"
+          >
+            <FormLabel
+              as="legend"
+              data-testid="new-instance-form-text-input-label"
+            >
               {t("newInstance.form.fields.name.title")}
             </FormLabel>
             <Input
@@ -113,34 +124,46 @@ function NewInstance(props: NewInstanceProps) {
               placeholder={t("newInstance.form.fields.name.title")}
               {...register("name", { required: true })}
               css={newInstanceFormInputStyles}
+              data-testid="new-instance-form-text-input-input"
             />
           </FormControl>
           {/* TODO! fixed height select with virtualization */}
-          <FormControl>
-            <FormLabel as="legend">
+          <FormControl data-testid="new-instance-form-only-releases-checkbox">
+            <FormLabel
+              as="legend"
+              data-testid="new-instance-form-only-releases-checkbox-label"
+            >
               <Stack spacing={5} direction="row">
                 <Checkbox
                   name="show-snapshots"
                   defaultChecked
                   onChange={handleShouldShowSnapshots}
                   colorScheme="purple"
+                  data-testid="new-instance-form-only-releases-checkbox-input"
                 >
-                  <span>{t("newInstance.showOnlyReleases")}</span>
+                  <span data-testid="new-instance-form-only-releases-checkbox-label-text">
+                    {t("newInstance.showOnlyReleases")}
+                  </span>
                 </Checkbox>
               </Stack>
             </FormLabel>
           </FormControl>
-          <FormControl marginBottom="6">
-            <FormLabel as="legend">
+          <FormControl marginBottom="6" data-testid="new-instance-form-select">
+            <FormLabel as="legend" data-testid="new-instance-form-select-label">
               {t("newInstance.form.fields.version.name")}
             </FormLabel>
             <Select
               {...register("version", { required: true })}
               isInvalid={Boolean(errors.version)}
               placeholder={t("newInstance.form.fields.version.selectVersion")}
+              data-testid="new-instance-form-select-input"
             >
               {map(filteredVersions, ({ id: version }) => (
-                <option value={version} key={version}>
+                <option
+                  value={version}
+                  key={version}
+                  data-testid="new-instance-form-select-option"
+                >
                   {version}
                 </option>
               ))}
@@ -152,6 +175,7 @@ function NewInstance(props: NewInstanceProps) {
             css={newInstanceFormSubmitButtonStyles}
             colorScheme="purple"
             padding="4"
+            data-testid="new-instance-form-submit-button"
           >
             {t("newInstance.actions.create")}
           </Button>

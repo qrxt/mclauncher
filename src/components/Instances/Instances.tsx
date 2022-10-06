@@ -28,7 +28,12 @@ function AddInstanceButton() {
 
   return (
     <Link to={"/add-instance"}>
-      <Button rightIcon={<AddIcon />} colorScheme="purple" variant="outline">
+      <Button
+        rightIcon={<AddIcon />}
+        colorScheme="purple"
+        variant="outline"
+        data-testid="instances-no-data-add-button"
+      >
         {t("instances.actions.addNewInstance")}
       </Button>
     </Link>
@@ -37,9 +42,9 @@ function AddInstanceButton() {
 
 function InstancesPlaceholder() {
   return (
-    <section css={instancesPlaceholderStyles}>
+    <div css={instancesPlaceholderStyles} data-testid="instances-no-data">
       <AddInstanceButton />
-    </section>
+    </div>
   );
 }
 
@@ -60,9 +65,8 @@ function InstancesList(props: InstancesListProps) {
 
   return (
     <section>
-      <ul css={instancesListStyles}>
+      <ul css={instancesListStyles} data-testid="instances-list">
         {instances.map((instance) => {
-          console.log(instance, selectedInstance);
           const isSelected = selectedInstance?.name === instance.name || false;
 
           return (
@@ -70,12 +74,17 @@ function InstancesList(props: InstancesListProps) {
               key={instance.name}
               css={instancesListItemStyles}
               onClick={handleListItemClick(instance)}
+              data-testid="instances-list-item"
             >
               <InstanceCard instance={instance} isSelected={isSelected} />
             </li>
           );
         })}
-        <li key="new-instance" css={instancesListItemStyles}>
+        <li
+          key="new-instance"
+          css={instancesListItemStyles}
+          data-testid="instances-list-item"
+        >
           <NewInstanceCard />
         </li>
       </ul>
@@ -87,7 +96,7 @@ function Instances(props: InstancesProps) {
   const { instances, selectedInstance, setSelectedInstance } = props;
 
   return (
-    <section css={instancesStyles}>
+    <section css={instancesStyles} data-testid="instances">
       <div css={instancesListWrapperStyles}>
         {size(instances) ? (
           <InstancesList
@@ -100,7 +109,7 @@ function Instances(props: InstancesProps) {
         )}
       </div>
 
-      <Sidebar>
+      <Sidebar data-testid="instances-sidebar">
         {selectedInstance && (
           <SelectedInstance selectedInstance={selectedInstance} />
         )}

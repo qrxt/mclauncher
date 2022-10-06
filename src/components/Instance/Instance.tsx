@@ -28,6 +28,7 @@ function InstanceCard(props: InstanceProps) {
       tabIndex={0}
       css={instanceCardStyles({ isSelected })}
       onDoubleClick={() => handleDoubleClick(instance.name)}
+      aria-selected={isSelected}
     >
       <header css={instanceNameStyles}>
         <Text>

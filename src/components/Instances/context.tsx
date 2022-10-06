@@ -87,21 +87,27 @@ const initialContext: InstancesContextInterface = {
 export const InstancesContext =
   React.createContext<InstancesContextInterface>(initialContext);
 
-const Provider = ({ children }: { children: React.ReactNode }) => {
+interface ProviderProps {
+  children: React.ReactNode;
+  initialInstances?: Instance[];
+}
+
+const Provider = ({ children, initialInstances }: ProviderProps) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const value = {
-    instances: state.instances,
+    instances: initialInstances || state.instances,
     isLoading: state.isLoading,
     selectedInstance: state.selectedInstance,
-    setSelectedInstance: (selectedInstance: Instance | null) =>
-      dispatch({
+    setSelectedInstance: (selectedInstance: Instance | null) => {
+      return dispatch({
         type: InstancesActionKind.SELECT_INSTANCE,
         payload: {
           selectedInstance,
           instances: state.instances,
         },
-      }),
+      });
+    },
     instancesSuccess: (newInstances: Instance[]) =>
       dispatch({
         type: InstancesActionKind.SUCCESS,

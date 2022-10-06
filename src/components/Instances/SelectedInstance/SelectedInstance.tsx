@@ -52,12 +52,20 @@ function SelectedInstance(props: SelectedInstanceProps) {
   }
 
   return (
-    <section css={selectedInstanceWrapperStyles}>
+    <section
+      css={selectedInstanceWrapperStyles}
+      data-testid="selected-instance"
+    >
       <Box marginBottom={12}>
         <dl>
           <div css={selectedInstanceInfoWrapperStyles}>
             <dt css={selectedInstanceInfoTitleStyles}>{t("instance.name")}</dt>
-            <dd css={selectedInstanceInfoStyles}>{name}</dd>
+            <dd
+              css={selectedInstanceInfoStyles}
+              data-testid="selected-instance-name"
+            >
+              {name}
+            </dd>
           </div>
 
           <div css={selectedInstanceInfoWrapperStyles}>
