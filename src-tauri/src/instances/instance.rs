@@ -160,11 +160,14 @@ impl Instance {
         Ok(required_parts)
     }
 
-    pub async fn launch(&self) -> Result<(), InstanceError> {
+    pub async fn launch<F: Fn()>(&self, on_close: F) -> Result<(), InstanceError> {
         let output = self.subtype.launch(self).await;
 
         match output {
-            Ok(output) => info!("OUTPUT: {:?}", output),
+            Ok(output) => {
+                on_close();
+                info!("OUTPUT: {:?}", output)
+            }
             Err(e) => error!("{}", e),
         }
 

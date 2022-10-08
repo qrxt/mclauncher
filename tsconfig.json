@@ -31,6 +31,7 @@
       "theme": ["./src/theme"],
       "assets/*": ["./src/assets"],
       "messages": ["./src/messages"],
+      "messages/*": ["./src/messages/*"],
       "__tests__": ["./__tests__"],
       "__tests__/*": ["./__tests__/*"]
     }

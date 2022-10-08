@@ -159,10 +159,11 @@ impl LauncherClient {
     // pub async fn edit(&self) -> Result<(), ClientError> {
     // }
 
-    pub async fn launch_instance(
+    pub async fn launch_instance<F: Fn()>(
         &'static self,
         name: &str,
         downloader: &'static Downloader,
+        on_close: F,
     ) -> Result<(), ClientError> {
         // let fitting_instance_option = self.instances.iter().find(|instance| instance.name == name);
         let instances = read_instances_json(self).await.instances;
@@ -200,7 +201,7 @@ impl LauncherClient {
 
         // launch
 
-        match instance.launch().await {
+        match instance.launch(on_close).await {
             Ok(_) => Ok(()),
             Err(_) => Err(ClientError::Launch("Failed to launch instance".to_string())),
         }

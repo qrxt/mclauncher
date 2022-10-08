@@ -16,6 +16,7 @@ import SelectedInstance from "./SelectedInstance";
 import { Button } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import NewInstanceCard from "components/NewInstanceCard";
+import InstanceContainer from "components/Instance/InstanceContainer";
 
 interface InstancesProps {
   instances: Instance[];
@@ -76,7 +77,7 @@ function InstancesList(props: InstancesListProps) {
               onClick={handleListItemClick(instance)}
               data-testid="instances-list-item"
             >
-              <InstanceCard instance={instance} isSelected={isSelected} />
+              <InstanceContainer instance={instance} isSelected={isSelected} />
             </li>
           );
         })}

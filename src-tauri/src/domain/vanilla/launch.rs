@@ -100,5 +100,7 @@ pub async fn launch(instance: &Instance) -> Result<(), InstanceError> {
         .filter_map(|line| line.ok())
         .for_each(|line| log_mc_line(&line));
 
+    // dbg!(command.status());
+
     Ok(())
 }

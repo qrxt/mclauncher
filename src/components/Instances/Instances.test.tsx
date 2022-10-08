@@ -22,6 +22,10 @@ describe("Test Instances", () => {
     },
   ];
 
+  beforeAll(() => {
+    window.__TAURI_IPC__ = () => null;
+  });
+
   function WrappedInstances() {
     const { setSelectedInstance, selectedInstance, instances } =
       useContext(InstancesContext);
