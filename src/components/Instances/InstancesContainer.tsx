@@ -25,7 +25,7 @@ function InstancesContainer() {
         instancesSuccess(newInstances as Instance[]);
       });
     }
-  }, [instances]);
+  }, [instances, instancesSuccess, isLoading]);
 
   return isLoading ? (
     <LoadingScreen />

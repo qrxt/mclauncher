@@ -1,11 +1,7 @@
 use log::info;
-use std::{
-    io::{BufRead, BufReader, Error, ErrorKind},
-    process::{Command, Stdio},
-};
+use std::process::{Child, Command, Stdio};
 
 use crate::{
-    client::log::log_mc_line,
     instances::instance::{Instance, InstanceError},
     launcher_config::config::{get_libraries_string_file_path, get_natives_path},
 };
@@ -42,7 +38,7 @@ impl Default for LaunchArguments {
     }
 }
 
-pub async fn launch(instance: &Instance) -> Result<(), InstanceError> {
+pub async fn launch(instance: &Instance) -> Result<Child, InstanceError> {
     let libraries_string_file_path = get_libraries_string_file_path(instance).unwrap();
     let libraries_list_file_content = tokio::fs::read(libraries_string_file_path).await?;
     let libs_string = std::str::from_utf8(&libraries_list_file_content).unwrap();
@@ -88,19 +84,7 @@ pub async fn launch(instance: &Instance) -> Result<(), InstanceError> {
 
     info!("Launch Command: {:?}", command);
 
-    let reader = BufReader::new(
-        command
-            .spawn()?
-            .stdout
-            .ok_or_else(|| Error::new(ErrorKind::Other, "Could not capture standard output."))?,
-    );
+    let child = command.spawn()?;
 
-    reader
-        .lines()
-        .filter_map(|line| line.ok())
-        .for_each(|line| log_mc_line(&line));
-
-    // dbg!(command.status());
-
-    Ok(())
+    Ok(child)
 }

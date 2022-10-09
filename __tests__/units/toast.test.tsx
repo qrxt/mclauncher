@@ -14,7 +14,7 @@ describe("Test toast", () => {
         title: toastTitle,
         isClosable: true,
       });
-    }, []);
+    }, [toast]);
 
     return (
       <div>

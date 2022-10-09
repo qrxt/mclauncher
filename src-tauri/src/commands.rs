@@ -43,8 +43,6 @@ pub async fn get_instances() -> Vec<Instance> {
 
 #[tauri::command]
 pub async fn launch_instance(name: &str, window: tauri::Window) -> Result<(), ()> {
-    println!("Window: {}", window.label());
-
     match window.emit("game_launched", name) {
         Ok(_) => info!("game_launched event fired. Payload: {}", name),
         Err(_) => error!("Failed to emit game_launched event. Payload: {}", name),

@@ -13,7 +13,8 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier",
-    "plugin:react-redux/recommended"
+    "plugin:react-redux/recommended",
+    "plugin:react-hooks/recommended"
   ],
   "overrides": [],
   "parser": "@typescript-eslint/parser",
@@ -26,9 +27,9 @@
     "react",
     "@typescript-eslint",
     "prettier",
-    "react-hooks",
     "react-redux",
-    "jsx-a11y"
+    "jsx-a11y",
+    "react-hooks"
   ],
   "rules": {
     "react/no-unknown-property": [2, { "ignore": ["css"] }],

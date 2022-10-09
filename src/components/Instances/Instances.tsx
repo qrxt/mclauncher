@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Instance } from "types/instance";
 import {
   instancesStyles,
@@ -6,17 +6,20 @@ import {
   instancesListWrapperStyles,
   instancesPlaceholderStyles,
   instancesListItemStyles,
+  instancesWrapperStyles,
 } from "./Instances.style";
 import size from "lodash/size";
 import { useTranslation } from "react-i18next";
 import Sidebar from "components/Sidebar";
-import InstanceCard from "components/Instance/Instance";
 import { Link } from "react-router-dom";
 import SelectedInstance from "./SelectedInstance";
 import { Button } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import NewInstanceCard from "components/NewInstanceCard";
 import InstanceContainer from "components/Instance/InstanceContainer";
+import StatusBar from "components/StatusBar";
+import { LaunchContext } from "components/App/context";
+import { last } from "lodash";
 
 interface InstancesProps {
   instances: Instance[];
@@ -95,19 +98,26 @@ function InstancesList(props: InstancesListProps) {
 
 function Instances(props: InstancesProps) {
   const { instances, selectedInstance, setSelectedInstance } = props;
+  const { launchedInstances } = useContext(LaunchContext);
+  const launchedInstance = last(launchedInstances);
 
   return (
     <section css={instancesStyles} data-testid="instances">
-      <div css={instancesListWrapperStyles}>
-        {size(instances) ? (
-          <InstancesList
-            instances={instances}
-            selectedInstance={selectedInstance}
-            setSelectedInstance={setSelectedInstance}
-          />
-        ) : (
-          <InstancesPlaceholder />
-        )}
+      <div css={instancesWrapperStyles}>
+        <div css={instancesListWrapperStyles}>
+          {size(instances) ? (
+            <InstancesList
+              instances={instances}
+              selectedInstance={selectedInstance}
+              setSelectedInstance={setSelectedInstance}
+            />
+          ) : (
+            <InstancesPlaceholder />
+          )}
+        </div>
+        {launchedInstance ? (
+          <StatusBar>{launchedInstance} is running</StatusBar>
+        ) : null}
       </div>
 
       <Sidebar data-testid="instances-sidebar">

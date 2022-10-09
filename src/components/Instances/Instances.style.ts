@@ -38,3 +38,9 @@ export const instancesListStyles = css`
   height: 100%;
   list-style: none;
 `;
+
+export const instancesWrapperStyles = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
