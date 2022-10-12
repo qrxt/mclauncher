@@ -14,7 +14,7 @@
       "all": true,
       "fs": {
         "all": true,
-        "scope": ["$APP/*", "$DESKTOP/*"]
+        "scope": ["$APP/*", "$DESKTOP/*", "$RESOURCE/*"]
       }
     },
     "bundle": {
@@ -41,7 +41,9 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": [
+        "./config.json"
+      ],
       "shortDescription": "",
       "targets": "all",
       "windows": {
