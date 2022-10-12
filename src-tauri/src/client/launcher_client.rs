@@ -66,6 +66,10 @@ impl LauncherClient {
     }
 
     pub async fn init(&mut self) -> Result<&Self, ClientError> {
+        let launcher_folder_path = get_base_path().unwrap();
+
+        create_dir_all(launcher_folder_path).await?;
+
         // Create instances storage
         let instances_storage_path = get_instances_storage_path(self).unwrap();
         let instances_json_path = Path::new(&instances_storage_path);

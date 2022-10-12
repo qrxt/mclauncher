@@ -12,6 +12,8 @@ export const instancesStyles = css`
 
 export const instancesListWrapperStyles = css`
   padding: 25px;
+  width: 100%;
+  height: 100%;
 `;
 
 export const instancesPlaceholderStyles = css`
