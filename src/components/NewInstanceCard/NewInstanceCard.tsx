@@ -22,7 +22,7 @@ function NewInstanceCard() {
         </header>
         <div css={instanceIconWrapperStyles}>
           <img
-            css={instanceIconStyles({ isSelected: false })}
+            css={instanceIconStyles}
             src={mcAddIcon}
             width="64"
             height="64"

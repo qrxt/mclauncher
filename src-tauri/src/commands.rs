@@ -42,14 +42,32 @@ pub async fn get_instances() -> Vec<Instance> {
 }
 
 #[tauri::command]
-pub async fn launch_instance(name: &str) -> Result<(), ()> {
+pub async fn launch_instance(name: &str, window: tauri::Window) -> Result<(), ()> {
+    match window.emit("game_launched", name) {
+        Ok(_) => info!("game_launched event fired. Payload: {}", name),
+        Err(_) => error!("Failed to emit game_launched event. Payload: {}", name),
+    };
+
     let name = name.to_string();
     info!("Launching instance {}", name);
     let client = CLIENT.get().await;
     let downloader = DOWNLOADER.get().await;
 
     tokio::spawn(async move {
-        match client.launch_instance(&name.to_string(), downloader).await {
+        match client
+            .launch_instance(
+                &name.to_string(),
+                downloader,
+                || {
+                    match &window.emit("game_closed", name.to_string()) {
+                        Ok(_) => info!("game_closed event fired. Payload: {}", &name),
+                        Err(_) => error!("Failed to emit game_launched event. Payload: {}", &name),
+                    };
+                },
+                &window,
+            )
+            .await
+        {
             Ok(_) => info!("Instance successfully launched"),
             Err(e) => error!("Failed to launch instance: {}", e),
         }

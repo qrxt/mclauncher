@@ -41,9 +41,18 @@ lazy_static! {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    setup_logger(CLIENT.get().await)?;
+    setup_logger(CLIENT.get().await).await?;
 
     tauri::Builder::default()
+        // .setup(|app| {
+        //     let x = tauri::WindowBuilder::new(
+        //         app,
+        //         "external", /* the unique window label */
+        //         tauri::WindowUrl::App("/settings".parse().unwrap()),
+        //     )
+        //     .build()?;
+        //     Ok(())
+        // })
         .invoke_handler(tauri::generate_handler![
             commands::get_instances,
             commands::launch_instance,

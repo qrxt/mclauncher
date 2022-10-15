@@ -22,6 +22,7 @@ export const instanceNameStyles = css`
 `;
 
 export const instanceIconWrapperStyles = css`
+  position: relative;
   height: 100px;
   width: 100%;
   padding: 5px;
@@ -29,19 +30,17 @@ export const instanceIconWrapperStyles = css`
   margin-bottom: 5px;
 `;
 
-export const instanceIconStyles = ({
-  isSelected,
-}: {
-  isSelected: boolean;
-}) => css`
+export const instanceIconStyles = css`
   width: 100%;
   height: 100%;
+`;
 
-  ${isSelected
-    ? css`
-        opacity: 0.75;
-      `
-    : ""}
+export const instanceLaunchedStyles = css`
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  width: 38px;
+  height: 38px;
 `;
 
 export default instanceCardStyles;

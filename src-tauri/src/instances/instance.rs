@@ -1,5 +1,5 @@
 use crate::{
-    client::launcher_client::LauncherClient,
+    client::{launcher_client::LauncherClient, log::log_mc_line},
     domain::{
         os::OS,
         vanilla::download::load_asset_index,
@@ -18,7 +18,11 @@ use crate::{
 };
 use log::{error, info};
 use serde::{Deserialize, Serialize};
-use std::{io, str::FromStr};
+use std::{
+    io::{self, BufRead, BufReader, ErrorKind},
+    process::Child,
+    str::FromStr,
+};
 use thiserror::Error;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -48,6 +52,21 @@ impl ToString for InstanceSubtype {
     }
 }
 
+fn log_instance(child: &mut Child) -> Result<(), InstanceError> {
+    let mut child = child.stdout.as_mut().ok_or_else(|| {
+        std::io::Error::new(ErrorKind::Other, "Could not capture standard output.")
+    })?;
+
+    let reader = BufReader::new(&mut child);
+
+    reader
+        .lines()
+        .filter_map(|line| line.ok())
+        .for_each(|line| log_mc_line(&line));
+
+    Ok(())
+}
+
 impl InstanceSubtype {
     pub fn get_required_parts(
         &self,
@@ -66,7 +85,13 @@ impl InstanceSubtype {
 
     pub async fn launch(&self, instance: &Instance) -> Result<(), InstanceError> {
         match self {
-            InstanceSubtype::Vanilla => launch_vanilla(instance).await,
+            InstanceSubtype::Vanilla => {
+                let mut child = launch_vanilla(instance).await?;
+
+                log_instance(&mut child)?;
+
+                Ok(())
+            }
             InstanceSubtype::Forge => todo!(),
         }
     }
@@ -82,16 +107,12 @@ pub struct Instance {
 
 #[derive(Debug, Error)]
 pub enum InstanceError {
-    // #[error("Failed to download required files: {0}")]
-    // DownloadFiles(String),
     #[error("Failed to get data for instance: {0}")]
     GetData(#[from] reqwest::Error),
     #[error("Failed to get local data for instance: {0}")]
     GetLocalData(String),
     #[error("IO error: {0}")]
     IOError(#[from] io::Error),
-    // #[error("Failed to install instance: {0}")]
-    // Install(String),
 }
 
 impl Instance {
@@ -111,10 +132,11 @@ impl Instance {
         }
     }
 
-    pub async fn install(
-        &self,
+    pub async fn install<'a>(
+        &'a self,
         client: &'static LauncherClient,
         downloader: &'static Downloader,
+        window: &'a tauri::Window,
     ) -> Result<(), InstanceError> {
         let list_of_downloads = self
             .get_required_parts(client)
@@ -122,10 +144,9 @@ impl Instance {
             .into_iter()
             .collect::<Vec<Download>>();
 
-        // let downloader = Downloader::new(list_of_downloads);
-
-        // downloader.downloads = list_of_downloads;
-        downloader.download_all(list_of_downloads).await?;
+        downloader
+            .download_all(list_of_downloads, Some(window))
+            .await?;
 
         let delimiter = match client.os {
             OS::Windows => ";",
@@ -160,11 +181,14 @@ impl Instance {
         Ok(required_parts)
     }
 
-    pub async fn launch(&self) -> Result<(), InstanceError> {
+    pub async fn launch<F: Fn()>(&self, on_close: F) -> Result<(), InstanceError> {
         let output = self.subtype.launch(self).await;
 
         match output {
-            Ok(output) => info!("OUTPUT: {:?}", output),
+            Ok(output) => {
+                on_close();
+                info!("OUTPUT: {:?}", output)
+            }
             Err(e) => error!("{}", e),
         }
 
@@ -172,7 +196,6 @@ impl Instance {
     }
 
     pub fn is_installed(&self) -> bool {
-        // TODO: rewrite
         let is_version_exist = std::path::Path::new(&get_version_path(self).unwrap()).exists();
 
         is_version_exist

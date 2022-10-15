@@ -5,15 +5,19 @@ import {
   instanceIconWrapperStyles,
   instanceNameStyles,
   instanceIconStyles,
+  instanceLaunchedStyles,
 } from "./Instance.style";
 import { invoke } from "@tauri-apps/api/tauri";
 import { launchInstance } from "messages";
 import mcIcon from "../../assets/icons/mc.png";
 import { Highlight, Text } from "@chakra-ui/react";
+import { PlayIcon } from "@heroicons/react/24/solid";
+import { colors } from "theme/theme";
 
-interface InstanceProps {
+export interface InstanceProps {
   instance: Instance;
   isSelected: boolean;
+  isLaunched: boolean;
 }
 
 function handleDoubleClick(name: string) {
@@ -21,7 +25,7 @@ function handleDoubleClick(name: string) {
 }
 
 function InstanceCard(props: InstanceProps) {
-  const { instance, isSelected } = props;
+  const { instance, isSelected, isLaunched } = props;
 
   return (
     <div
@@ -41,12 +45,10 @@ function InstanceCard(props: InstanceProps) {
         </Text>
       </header>
       <div css={instanceIconWrapperStyles}>
-        <img
-          css={instanceIconStyles({ isSelected })}
-          src={mcIcon}
-          width="64"
-          height="64"
-        />
+        <div hidden={!isLaunched} css={instanceLaunchedStyles}>
+          <PlayIcon color={colors.purple} />
+        </div>
+        <img css={instanceIconStyles} src={mcIcon} width="64" height="64" />
       </div>
     </div>
   );

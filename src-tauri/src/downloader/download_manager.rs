@@ -1,5 +1,5 @@
 use futures::StreamExt;
-use log::{info, warn};
+use log::{error, info, warn};
 use reqwest::{Client, StatusCode};
 use std::path::Path;
 use tokio::fs::{create_dir_all, File};
@@ -52,15 +52,33 @@ impl Downloader {
     pub async fn download_all(
         &self,
         downloads: Vec<Download>,
+        window_option: Option<&tauri::Window>,
     ) -> Result<Vec<StatusCode>, InstanceError> {
-        let fetches = futures::stream::iter(
-            downloads
-                .into_iter()
-                .filter(|download| self.check_if_exists(download))
-                .map(
-                    |download| async move { self.download_to(&download.url, &download.path).await },
-                ),
-        )
+        let filtered_downloads: Vec<Download> = downloads
+            .into_iter()
+            .filter(|download| self.check_if_exists(download))
+            .collect();
+        let total = filtered_downloads.len();
+
+        let fetches = futures::stream::iter({
+            filtered_downloads.into_iter().map(|download| async move {
+                let downloaded_file = self.download_to(&download.url, &download.path).await;
+                let (_, file_name) = &download.path.rsplit_once('/').unwrap();
+
+                let payload = (file_name, total);
+                if let Some(window) = window_option {
+                    match window.emit("file_downloaded", &payload) {
+                        Ok(_) => info!("file_downloaded event fired. Payload: {:?}", &payload),
+                        Err(_) => error!(
+                            "Failed to emit file_downloaded event. Payload: {:?}",
+                            &payload
+                        ),
+                    };
+                }
+
+                downloaded_file
+            })
+        })
         .buffer_unordered(16)
         .collect::<Vec<Result<StatusCode, InstanceError>>>();
 
@@ -102,7 +120,7 @@ mod test_download_manager {
             },
         ];
 
-        let statuses = downloader.download_all(downloads).await.unwrap();
+        let statuses = downloader.download_all(downloads, None).await.unwrap();
 
         statuses
             .into_iter()

@@ -11,7 +11,11 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "all": true,
+      "fs": {
+        "all": true,
+        "scope": ["$APP/*", "$DESKTOP/*", "$RESOURCE/*"]
+      }
     },
     "bundle": {
       "active": true,
@@ -37,7 +41,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": ["./config.json"],
       "shortDescription": "",
       "targets": "all",
       "windows": {

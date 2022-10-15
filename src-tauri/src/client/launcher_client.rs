@@ -66,6 +66,10 @@ impl LauncherClient {
     }
 
     pub async fn init(&mut self) -> Result<&Self, ClientError> {
+        let launcher_folder_path = get_base_path().unwrap();
+
+        create_dir_all(launcher_folder_path).await?;
+
         // Create instances storage
         let instances_storage_path = get_instances_storage_path(self).unwrap();
         let instances_json_path = Path::new(&instances_storage_path);
@@ -159,10 +163,12 @@ impl LauncherClient {
     // pub async fn edit(&self) -> Result<(), ClientError> {
     // }
 
-    pub async fn launch_instance(
+    pub async fn launch_instance<F: Fn()>(
         &'static self,
         name: &str,
         downloader: &'static Downloader,
+        on_close: F,
+        window: &tauri::Window,
     ) -> Result<(), ClientError> {
         // let fitting_instance_option = self.instances.iter().find(|instance| instance.name == name);
         let instances = read_instances_json(self).await.instances;
@@ -181,7 +187,7 @@ impl LauncherClient {
         let timer = Instant::now();
 
         if !instance.is_installed() {
-            let installation = instance.install(self, downloader).await;
+            let installation = instance.install(self, downloader, window).await;
 
             if let Err(e) = installation {
                 return Err(ClientError::InstallInstance(format!(
@@ -200,7 +206,7 @@ impl LauncherClient {
 
         // launch
 
-        match instance.launch().await {
+        match instance.launch(on_close).await {
             Ok(_) => Ok(()),
             Err(_) => Err(ClientError::Launch("Failed to launch instance".to_string())),
         }

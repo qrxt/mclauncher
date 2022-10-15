@@ -22,6 +22,10 @@ describe("Test Instances", () => {
     },
   ];
 
+  beforeAll(() => {
+    window.__TAURI_IPC__ = () => null;
+  });
+
   function WrappedInstances() {
     const { setSelectedInstance, selectedInstance, instances } =
       useContext(InstancesContext);
@@ -31,6 +35,8 @@ describe("Test Instances", () => {
         instances={instances}
         selectedInstance={selectedInstance}
         setSelectedInstance={setSelectedInstance}
+        total={0}
+        downloadedFilesLength={0}
       />
     );
   }
@@ -41,6 +47,8 @@ describe("Test Instances", () => {
         instances={[]}
         selectedInstance={null}
         setSelectedInstance={() => null}
+        total={0}
+        downloadedFilesLength={0}
       />
     );
     const instancesElem = instances(result.baseElement);

@@ -1,4 +1,5 @@
 use log::{error, info, warn};
+use tokio::fs::OpenOptions;
 
 use crate::launcher_config::config::get_log_path;
 
@@ -28,9 +29,18 @@ pub fn log_mc_line(line: &str) {
     }
 }
 
-pub fn setup_logger(client: &LauncherClient) -> Result<(), fern::InitError> {
+pub async fn setup_logger(client: &LauncherClient) -> Result<(), fern::InitError> {
     let now = chrono::Local::now().format("[%Y-%m-%d][%H:%M:%S]");
-    let log_path = get_log_path(client, "latest").unwrap();
+    let logfile_name = "latest";
+    let logfile_path = get_log_path(client, logfile_name).unwrap();
+
+    OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(&logfile_path)
+        .await?;
 
     fern::Dispatch::new()
         .format(move |out, message, record| {
@@ -44,7 +54,7 @@ pub fn setup_logger(client: &LauncherClient) -> Result<(), fern::InitError> {
         })
         .level(log::LevelFilter::Debug)
         .chain(std::io::stdout())
-        .chain(fern::log_file(log_path)?)
+        .chain(fern::log_file(logfile_path)?)
         .apply()?;
     Ok(())
 }
