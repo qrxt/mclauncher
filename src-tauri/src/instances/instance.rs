@@ -132,10 +132,11 @@ impl Instance {
         }
     }
 
-    pub async fn install(
-        &self,
+    pub async fn install<'a>(
+        &'a self,
         client: &'static LauncherClient,
         downloader: &'static Downloader,
+        window: &'a tauri::Window,
     ) -> Result<(), InstanceError> {
         let list_of_downloads = self
             .get_required_parts(client)
@@ -143,7 +144,9 @@ impl Instance {
             .into_iter()
             .collect::<Vec<Download>>();
 
-        downloader.download_all(list_of_downloads).await?;
+        downloader
+            .download_all(list_of_downloads, Some(window))
+            .await?;
 
         let delimiter = match client.os {
             OS::Windows => ";",

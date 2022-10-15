@@ -55,12 +55,17 @@ pub async fn launch_instance(name: &str, window: tauri::Window) -> Result<(), ()
 
     tokio::spawn(async move {
         match client
-            .launch_instance(&name.to_string(), downloader, || {
-                match window.emit("game_closed", name.to_string()) {
-                    Ok(_) => info!("game_closed event fired. Payload: {}", &name),
-                    Err(_) => error!("Failed to emit game_launched event. Payload: {}", &name),
-                };
-            })
+            .launch_instance(
+                &name.to_string(),
+                downloader,
+                || {
+                    match &window.emit("game_closed", name.to_string()) {
+                        Ok(_) => info!("game_closed event fired. Payload: {}", &name),
+                        Err(_) => error!("Failed to emit game_launched event. Payload: {}", &name),
+                    };
+                },
+                &window,
+            )
             .await
         {
             Ok(_) => info!("Instance successfully launched"),

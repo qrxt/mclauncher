@@ -6,13 +6,10 @@ import NewInstancePage from "components/pages/NewInstancePage";
 import { LaunchContext } from "./context";
 import { listen } from "@tauri-apps/api/event";
 import { gameClosed, gameLaunched } from "messages/events";
-import LogPage from "components/pages/LogPage";
 
 function App() {
-  const { setIsLaunched, setIsStopped, isInstanceLaunched, launchedInstances } =
+  const { setIsLaunched, setIsStopped, isInstanceLaunched } =
     useContext(LaunchContext);
-
-  console.log(launchedInstances);
 
   useEffect(() => {
     const unlisten = listen<string>(gameLaunched, (event) => {
@@ -52,9 +49,7 @@ function App() {
       <Routes>
         <Route path="/add-instance" element={<NewInstancePage />} />
         <Route path="/" element={<InstancesPage />} />
-        {/* <Route path="/" element={<LogPage />} /> */}
         <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/log" element={<LogPage />} />
       </Routes>
     </BrowserRouter>
   );

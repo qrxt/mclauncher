@@ -48,12 +48,7 @@ function InstanceCard(props: InstanceProps) {
         <div hidden={!isLaunched} css={instanceLaunchedStyles}>
           <PlayIcon color={colors.purple} />
         </div>
-        <img
-          css={instanceIconStyles({ isSelected })}
-          src={mcIcon}
-          width="64"
-          height="64"
-        />
+        <img css={instanceIconStyles} src={mcIcon} width="64" height="64" />
       </div>
     </div>
   );

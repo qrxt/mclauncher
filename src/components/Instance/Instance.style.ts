@@ -30,11 +30,7 @@ export const instanceIconWrapperStyles = css`
   margin-bottom: 5px;
 `;
 
-export const instanceIconStyles = ({
-  isSelected,
-}: {
-  isSelected: boolean;
-}) => css`
+export const instanceIconStyles = css`
   width: 100%;
   height: 100%;
 `;

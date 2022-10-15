@@ -168,6 +168,7 @@ impl LauncherClient {
         name: &str,
         downloader: &'static Downloader,
         on_close: F,
+        window: &tauri::Window,
     ) -> Result<(), ClientError> {
         // let fitting_instance_option = self.instances.iter().find(|instance| instance.name == name);
         let instances = read_instances_json(self).await.instances;
@@ -186,7 +187,7 @@ impl LauncherClient {
         let timer = Instant::now();
 
         if !instance.is_installed() {
-            let installation = instance.install(self, downloader).await;
+            let installation = instance.install(self, downloader, window).await;
 
             if let Err(e) = installation {
                 return Err(ClientError::InstallInstance(format!(

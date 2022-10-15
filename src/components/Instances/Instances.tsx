@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import Sidebar from "components/Sidebar";
 import { Link } from "react-router-dom";
 import SelectedInstance from "./SelectedInstance";
-import { Button } from "@chakra-ui/react";
+import { Button, Progress } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import NewInstanceCard from "components/NewInstanceCard";
 import InstanceContainer from "components/Instance/InstanceContainer";
@@ -25,6 +25,8 @@ interface InstancesProps {
   instances: Instance[];
   selectedInstance: Instance | null;
   setSelectedInstance: (instance: Instance) => void;
+  total: number;
+  downloadedFilesLength: number;
 }
 
 function AddInstanceButton() {
@@ -97,7 +99,13 @@ function InstancesList(props: InstancesListProps) {
 }
 
 function Instances(props: InstancesProps) {
-  const { instances, selectedInstance, setSelectedInstance } = props;
+  const {
+    instances,
+    selectedInstance,
+    setSelectedInstance,
+    total,
+    downloadedFilesLength,
+  } = props;
   const { launchedInstances } = useContext(LaunchContext);
   const launchedInstance = last(launchedInstances);
 
@@ -119,6 +127,10 @@ function Instances(props: InstancesProps) {
           <StatusBar>{launchedInstance} is running</StatusBar>
         ) : null}
       </div>
+
+      {total > 0 ? (
+        <Progress hasStripe value={(downloadedFilesLength / total) * 100} />
+      ) : null}
 
       <Sidebar data-testid="instances-sidebar">
         {selectedInstance && (
