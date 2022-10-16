@@ -16,7 +16,7 @@ Simple minecraft launcher written in Tauri.
 - [x] Multiple instances
 - Packs support
   - [x] Vanilla
-  - [] Modded
+  - [ ] Modded
 
 ## Stack
 
