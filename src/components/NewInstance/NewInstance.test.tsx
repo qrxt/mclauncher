@@ -13,10 +13,12 @@ describe("Test NewInstance", () => {
     {
       id: "1.16.4",
       type: "release",
+      releaseTime: "2021-01-14T16:05:32+00:00",
     },
     {
       id: "0.0.0",
       type: "rc",
+      releaseTime: "2021-01-14T16:05:32+00:00",
     },
   ];
 

@@ -41,7 +41,11 @@ function useFilteredVersions(versions: Version[], onlyReleases: boolean) {
     ? filter(versions, (version) => version.type == "release")
     : versions;
 
-  return filteredVersions;
+  // Temporarily remove versions newer than 1.16.5
+  const releaseTime = "2021-01-14T16:05:32+00:00"; // Release Date of 1.16.5
+  return filteredVersions.filter((version) => {
+    return new Date(version.releaseTime) <= new Date(releaseTime);
+  });
 }
 
 function NewInstance(props: NewInstanceProps) {
